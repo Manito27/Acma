@@ -1,0 +1,15 @@
+.registro-container {
+    padding: 20px;
+  }
+  
+  .registro-container .ant-form-item {
+    margin-bottom: 12px;
+  }
+  
+  .registro-container .ant-btn {
+    width: 100%;
+  }
+  
+  .registro-container .ant-table {
+    margin-top: 20px;
+  }

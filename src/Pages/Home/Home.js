@@ -1,75 +1,75 @@
 import React from 'react';
-import { Carousel, Layout, Button, Card, Row, Col } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Layout, Typography, Row, Col, Card } from 'antd';
 
+import Whash from '../../assets/img/Whash.jpg';
+import BigLifiting from '../../assets/img/BigLifiting.jpg';
+import lifingtManager from '../../assets/img/lifingtManager.jpg';
 
 const { Content } = Layout;
-
-const carouselItems = [
-  {
-    title: 'Transforme a aquisição pública',
-    description: 'Crie processos de aquisição mais eficientes e simplificados.',
-    buttonText: 'Comece Agora',
-    link: '/servicos-de-registro'
-  },
-  {
-    title: 'Valor pelo dinheiro',
-    description: 'Promova oportunidades iguais para a comunidade empresarial.',
-    buttonText: 'Saiba Mais',
-    link: '/valor-pelo-dinheiro'
-  },
-  {
-    title: 'Transparência e Responsabilidade',
-    description: 'Melhor conformidade regulatória e transparência.',
-    buttonText: 'Descubra Mais',
-    link: '/transparencia'
-  }
-];
+const { Title, Paragraph } = Typography;
 
 const Home = () => {
   return (
-    <Layout style={{ background: '#f0f2f5' }}>
+    <Layout style={{ background: '#fff', overflowX: 'hidden', padding: '50px' }}>
       <Content>
-        <Carousel autoplay>
-          {carouselItems.map((item, index) => (
-            <div key={index} style={{ textAlign: 'center', padding: '50px', background: '#1890ff', color: '#fff' }}>
-              <h1>{item.title}</h1>
-              <p>{item.description}</p>
-              <Button type="primary" href={item.link} style={{ marginTop: '20px' }}>
-                {item.buttonText}
-              </Button>
-            </div>
-          ))}
-        </Carousel>
-        <div style={{ padding: '24px', textAlign: 'center' }}>
-        <h2 style={{ fontWeight: 'bold' }}>O que podemos fazer por si hoje?</h2>
-          <p>A plataforma eConcursos oferece vários serviços e soluções online para ajudar você a participar da aquisição governamental.</p>
-          <Row gutter={16} style={{marginTop:'4%'}}>
-            <Col span={8}>
-              <Card title="Planos de Aquisição" bordered={false} style={{ textAlign: 'left' }}>
-                <p>Publique planos anuais de aquisição de agências governamentais para que a comunidade empresarial se prepare e responda mais efetivamente.</p>
-                <Button type="link" href="/planos-de-aquisicao">
-                  Saiba Mais <InfoCircleOutlined />
-                </Button>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card title="Concursos" bordered={false} style={{ textAlign: 'left' }}>
-                <p>Acesse avisos de concursos de várias agências governamentais para a aquisição de bens, serviços e obras.</p>
-                <Button type="link" href="/concursos">
-                  Saiba Mais <InfoCircleOutlined />
-                </Button>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card title="Avisos Publicados" bordered={false} style={{ textAlign: 'left' }}>
-                <p>Fornece acesso a avisos de concursos, atas de abertura de propostas, relatórios de avaliação, adjudicações e outras informações sobre aquisições.</p>
-                <Button type="link" href="/avisos-publicados">
-                  Saiba Mais <InfoCircleOutlined />
-                </Button>
-              </Card>
-            </Col>
-          </Row>
+        {/* Seção de Cards */}
+        <Row gutter={[24, 24]} style={{ marginTop: '40px', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}>
+          {/* Card 1 - Historial */}
+          <Col xs={24} sm={12} md={8}>
+            <Card
+              hoverable
+              cover={
+                <img src={Whash} alt="WASH" style={{ height: '200px', width: '100%', objectFit: 'cover' }} />
+              }
+            >
+              <Title level={4}>WASH(WATER SANITATION HYGIENE)</Title>
+              <Paragraph style={{ color: '#555', textAlign: 'justify' }}>
+                Em 2020 nasce a ACMA, LDA para salvaguardar a gestão empresarial e educacional em
+                Moçambique e no mundo todo, garantindo um bom ambiente nas relações estabelecidas
+                com os Recursos Humanos.
+              </Paragraph>
+            </Card>
+          </Col>
+
+          {/* Card 2 - Objectivo */}
+          <Col xs={24} sm={12} md={8}>
+            <Card
+              hoverable
+              cover={
+                <img src={BigLifiting} alt="Big Lifting" style={{ height: '200px', width: '100%', objectFit: 'cover' }} />
+              }
+            >
+              <Title level={4}>BIG LIFTING</Title>
+              <Paragraph style={{ color: '#555', textAlign: 'justify' }}>
+                O principal objetivo é o recrutamento, prestação de serviços e fornecimento
+                de quadros profissionais, além de formação técnica e científica.
+              </Paragraph>
+            </Card>
+          </Col>
+
+          {/* Card 3 - Perspectivas */}
+          <Col xs={24} sm={12} md={8}>
+            <Card
+              hoverable
+              cover={
+                <img src={lifingtManager} alt="Lifting Manager" style={{ height: '200px', width: '100%', objectFit: 'cover' }} />
+              }
+            >
+              <Title level={4}>GENERALCERTIFICATE IN LIFTING MANAGER</Title>
+              <Paragraph style={{ color: '#555', textAlign: 'justify' }}>
+                Aprimorar a estrutura organizacional, fortalecer a eficiência entre setores e
+                desenvolver soluções firmes em TICs para melhor gestão.
+              </Paragraph>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* Texto adicional abaixo dos cards */}
+        <div style={{ maxWidth: '1200px', margin: '40px auto', textAlign: 'center' }}>
+          <Paragraph style={{ fontSize: '1.2rem', color: '#555', textAlign: 'justify' }}>
+            A ACMA– LDA compromete-se com a excelência nos serviços prestados, oferecendo soluções
+            personalizadas para cada cliente e mantendo os mais altos padrões de qualidade.
+          </Paragraph>
         </div>
       </Content>
     </Layout>

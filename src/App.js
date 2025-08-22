@@ -1,37 +1,32 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, Dropdown, Avatar, Badge } from 'antd';
-import { BellOutlined, UserOutlined, MailOutlined,WhatsAppOutlined } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
+import { WhatsAppOutlined } from '@ant-design/icons';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
-import mapiImage from './assets/img/mapi.png'; // Import the image
+import Servicos from './Pages/Servicos/Servicos';
+import CursosInternacionais from './Pages/Cursos/CursosInternacionais';
+import Carros from './Pages/Carros/Carros';
+import Sobre from './Pages/Sobre/Sobre';
+import Contactos from './Pages/Contactos/Contactos';
+import Reservas from './Pages/Reservas/Reservas';
+import Suporte from './Pages/Suporte/Suporte';
 
 const { Header, Content, Footer } = Layout;
-const { SubMenu } = Menu;
-
-const items = [
-  { key: '1', label: 'Home' },
-  { key: '2', label: 'Concursos' },
-  { key: '3', label: 'Avisos' },
-  { key: '4', label: 'Serviços de Registro' }
-];
-
-const moreItems = [
-  { key: '5', label: 'Relatórios' },
-  { key: '6', label: 'Estatísticas' },
-  { key: '7', label: 'Configurações Avançadas' },
-  { key: '8', label: 'Suporte' }
-];
-
-const userMenu = (
-  <Menu>
-    <Menu.Item key="1">Perfil</Menu.Item>
-    <Menu.Item key="2">Configurações</Menu.Item>
-    <Menu.Item key="3">Sair</Menu.Item>
-  </Menu>
-);
 
 const App = () => {
+  const navigate = useNavigate();
+
+  const handleMenuClick = (e) => {
+    if (e.keyPath.length > 1) {
+      navigate(`/${e.keyPath.reverse().join('/')}`);
+    } else {
+      navigate(`/${e.key}`);
+    }
+  };
+
   return (
-    <Layout>
+    <Layout style={{ minHeight: '100vh' }}>
+      {/* Navbar */}
       <Header
         style={{
           position: 'sticky',
@@ -40,92 +35,144 @@ const App = () => {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: '#FFF',
-          justifyContent: 'space-between'
+          backgroundColor: '#1565C0', // Azul mais escuro e elegante
+          justifyContent: 'space-between',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)', // Sombra suave
+          padding: '0 24px',
+          height: '64px',
+          lineHeight: '64px'
         }}
       >
-        <img src={mapiImage} alt="Mapi" style={{ width: '60px', marginLeft: '24px' }} />
+        <div style={{ 
+          fontWeight: 'bold', 
+          fontSize: '24px', 
+          color: '#fff',
+          textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
+          letterSpacing: '1px'
+        }}>
+          Acma
+        </div>
         <Menu
-          theme="light"
+          theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['home']}
           style={{
             flex: 1,
             minWidth: 0,
-            justifyContent: 'center',
-            display: 'flex'
+            justifyContent: 'flex-end',
+            display: 'flex',
+            backgroundColor: 'transparent',
+            border: 'none',
+            lineHeight: '64px'
           }}
+          onClick={handleMenuClick}
         >
-          {items.map(item => (
-            <Menu.Item key={item.key}>{item.label}</Menu.Item>
-          ))}
-          <SubMenu key="more" title="Mais">
-            {moreItems.map(item => (
-              <Menu.Item key={item.key}>{item.label}</Menu.Item>
-            ))}
-          </SubMenu>
+          <Menu.Item key="home" style={{ fontWeight: '500' }}>Página Inicial</Menu.Item>
+          <Menu.Item key="servicos" style={{ fontWeight: '500' }}>Serviços</Menu.Item>
+          <Menu.Item key="cursos" style={{ fontWeight: '500' }}>Cursos</Menu.Item>
+          <Menu.SubMenu 
+            key="consultas" 
+            title="Consulta de Certificados"
+            style={{ fontWeight: '500' }}
+          >
+            <Menu.Item key="consultas/empresas">Empresas</Menu.Item>
+            <Menu.Item key="consultas/singulares">Pessoas Singular</Menu.Item>
+          </Menu.SubMenu>
+          <Menu.Item key="sala" style={{ fontWeight: '500' }}>Sala Online</Menu.Item>
+          <Menu.Item key="sobre" style={{ fontWeight: '500' }}>Sobre Nós</Menu.Item>
+          <Menu.Item key="inscricao" style={{ fontWeight: '500' }}>Inscrição</Menu.Item>
         </Menu>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Badge count={25}>
-            <BellOutlined style={{ fontSize: '20px', visibility:'hidden',marginRight: '24px' }} />
-          </Badge>
-           <Badge count={5}>
-            <BellOutlined style={{ fontSize: '20px', marginRight: '24px' }} />
-          </Badge>
-          <MailOutlined style={{ fontSize: '20px', marginRight: '24px' }} />
-          <Dropdown overlay={userMenu}>
-            <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <Avatar icon={<UserOutlined />} style={{ marginRight: '8px' }} />
-              <span>Username</span>
-            </div>
-          </Dropdown>
-        </div>
       </Header>
+
+      {/* Conteúdo */}
       <Content
         style={{
           padding: '0 48px',
-          marginTop:'2%'
+          marginTop: '2%',
+          flex: 1,
+          marginBottom: '64px' // Espaço para o footer fixo
         }}
       >
-     
         <div
           style={{
             padding: 24,
             minHeight: 380,
             background: '#fff',
             borderRadius: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}
         >
-          <Home/>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/servicos" element={<Servicos />} />
+            <Route path="/cursos" element={<CursosInternacionais />} />
+            <Route path="/reservas" element={<Reservas />} />
+            <Route path="/sobre" element={<Sobre />} />
+            <Route path="/contactos" element={<Contactos />} />
+            <Route path="/suporte" element={<Suporte />} />
+            <Route path="/consultas/empresas" element={<div>Consulta Empresas</div>} />
+            <Route path="/consultas/singulares" element={<div>Consulta Singular</div>} />
+          </Routes>
         </div>
       </Content>
+
+      {/* Rodapé fixo */}
       <Footer
         style={{
           textAlign: 'center',
+          backgroundColor: '#1565C0', // Mesmo azul da navbar
+          color: '#fff',
+          padding: '16px 20px',
+          fontWeight: '500',
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          height: '64px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        Econcurso ©{new Date().getFullYear()} Created by MAPI 
+        <div>
+          Acma ©{new Date().getFullYear()} - Acama LDA | 
+          <span style={{ marginLeft: '8px', opacity: '0.8' }}>
+            Todos os direitos reservados
+          </span>
+        </div>
       </Footer>
+
+      {/* Botão do WhatsApp */}
       <a
-        href="https://wa.me/15551234567" // Substitua pelo seu link de suporte do WhatsApp
+        href="https://wa.me/15551234567"
         target="_blank"
         rel="noopener noreferrer"
         style={{
           position: 'fixed',
           width: '60px',
           height: '60px',
-          bottom: '40px',
-          right: '40px',
-          backgroundColor: '#25D366', // Cor do WhatsApp
+          bottom: '80px',
+          right: '30px',
+          backgroundColor: '#25D366',
           borderRadius: '50%',
           textAlign: 'center',
-          boxShadow: '2px 2px 3px rgba(0, 0, 0, 0.3)',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
           color: 'white',
           fontSize: '30px',
-          zIndex: 1000
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s',
+          ':hover': {
+            transform: 'scale(1.1)',
+            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)'
+          }
         }}
       >
-        <WhatsAppOutlined style={{ marginTop: '16px' }} />
+        <WhatsAppOutlined />
       </a>
     </Layout>
   );
