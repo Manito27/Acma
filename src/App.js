@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { WhatsAppOutlined } from '@ant-design/icons';
+import { WhatsAppOutlined, MailOutlined } from '@ant-design/icons';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Servicos from './Pages/Servicos/Servicos';
@@ -10,6 +10,10 @@ import Sobre from './Pages/Sobre/Sobre';
 import Contactos from './Pages/Contactos/Contactos';
 import Reservas from './Pages/Reservas/Reservas';
 import Suporte from './Pages/Suporte/Suporte';
+import Inscricao from './Pages/Inscricao/F_nscricao';
+import Empresas from './Pages/Certificados/Empresas';
+import Singular from './Pages/Certificados/Singular';
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -111,8 +115,9 @@ const App = () => {
             <Route path="/sobre" element={<Sobre />} />
             <Route path="/contactos" element={<Contactos />} />
             <Route path="/suporte" element={<Suporte />} />
-            <Route path="/consultas/empresas" element={<div>Consulta Empresas</div>} />
-            <Route path="/consultas/singulares" element={<div>Consulta Singular</div>} />
+            <Route path="/consultas/empresas" element={<Empresas />} />
+            <Route path="/consultas/singulares" element={<Singular />} />
+            <Route path="/inscricao" element={<Inscricao />} />
           </Routes>
         </div>
       </Content>
@@ -146,7 +151,7 @@ const App = () => {
 
       {/* Botão do WhatsApp */}
       <a
-        href="https://wa.me/15551234567"
+        href="https://wa.me/+258878726990"
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -173,6 +178,35 @@ const App = () => {
         }}
       >
         <WhatsAppOutlined />
+      </a>
+
+      {/* Botão de Email */}
+      <a
+        href="mailto:info@acma.co.mz"
+        style={{
+          position: 'fixed',
+          width: '60px',
+          height: '60px',
+          bottom: '10px',
+          right: '30px',
+          backgroundColor: '#007BFF',
+          borderRadius: '50%',
+          textAlign: 'center',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          color: 'white',
+          fontSize: '30px',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s',
+          ':hover': {
+            transform: 'scale(1.1)',
+            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)'
+          }
+        }}
+      >
+        <MailOutlined />
       </a>
     </Layout>
   );
