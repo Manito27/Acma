@@ -5,14 +5,12 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Servicos from './Pages/Servicos/Servicos';
 import CursosInternacionais from './Pages/Cursos/CursosInternacionais';
-import Carros from './Pages/Carros/Carros';
 import Sobre from './Pages/Sobre/Sobre';
 import Contactos from './Pages/Contactos/Contactos';
-import Reservas from './Pages/Reservas/Reservas';
 import Suporte from './Pages/Suporte/Suporte';
 import Inscricao from './Pages/Inscricao/F_nscricao';
-import Empresas from './Pages/Certificados/Empresas';
-import Singular from './Pages/Certificados/Singular';
+import Consulta from './Pages/Consulta/Consulta';
+import SalaOnline from './Pages/Sala/SalaOnline';
 
 
 const { Header, Content, Footer } = Layout;
@@ -74,15 +72,8 @@ const App = () => {
           <Menu.Item key="home" style={{ fontWeight: '500' }}>Página Inicial</Menu.Item>
           <Menu.Item key="servicos" style={{ fontWeight: '500' }}>Serviços</Menu.Item>
           <Menu.Item key="cursos" style={{ fontWeight: '500' }}>Cursos</Menu.Item>
-          <Menu.SubMenu 
-            key="consultas" 
-            title="Consulta de Certificados"
-            style={{ fontWeight: '500' }}
-          >
-            <Menu.Item key="consultas/empresas">Empresas</Menu.Item>
-            <Menu.Item key="consultas/singulares">Pessoas Singular</Menu.Item>
-          </Menu.SubMenu>
-          <Menu.Item key="sala" style={{ fontWeight: '500' }}>Sala Online</Menu.Item>
+          <Menu.Item key="Consulta" style={{ fontWeight: '500' }}>Consultar Certificado</Menu.Item>
+          <Menu.Item key="SalaOnline" style={{ fontWeight: '500' }}>Sala Online</Menu.Item>
           <Menu.Item key="sobre" style={{ fontWeight: '500' }}>Sobre Nós</Menu.Item>
           <Menu.Item key="inscricao" style={{ fontWeight: '500' }}>Inscrição</Menu.Item>
         </Menu>
@@ -111,13 +102,12 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/servicos" element={<Servicos />} />
             <Route path="/cursos" element={<CursosInternacionais />} />
-            <Route path="/reservas" element={<Reservas />} />
             <Route path="/sobre" element={<Sobre />} />
             <Route path="/contactos" element={<Contactos />} />
             <Route path="/suporte" element={<Suporte />} />
-            <Route path="/consultas/empresas" element={<Empresas />} />
-            <Route path="/consultas/singulares" element={<Singular />} />
             <Route path="/inscricao" element={<Inscricao />} />
+            <Route path="/Consulta" element={<Consulta />} />
+            <Route path="/SalaOnline" element={<SalaOnline />} />
           </Routes>
         </div>
       </Content>
@@ -151,7 +141,7 @@ const App = () => {
 
       {/* Botão do WhatsApp */}
       <a
-        href="https://wa.me/+258878726990"
+        href="https://wa.me/+258869926990"
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -182,7 +172,7 @@ const App = () => {
 
       {/* Botão de Email */}
       <a
-        href="mailto:info@acma.co.mz"
+        href="mailto:geral@acmaconsultancy.com"
         style={{
           position: 'fixed',
           width: '60px',
