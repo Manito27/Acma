@@ -74,6 +74,7 @@ const App = () => {
           <Menu.Item key="cursos" style={{ fontWeight: '500' }}>Cursos</Menu.Item>
           <Menu.Item key="Consulta" style={{ fontWeight: '500' }}>Consultar Certificado</Menu.Item>
           <Menu.Item key="SalaOnline" style={{ fontWeight: '500' }}>Sala Online</Menu.Item>
+          <Menu.Item key="eventos" style={{ fontWeight: '500' }}>Eventos</Menu.Item>
           <Menu.Item key="sobre" style={{ fontWeight: '500' }}>Sobre Nós</Menu.Item>
           <Menu.Item key="inscricao" style={{ fontWeight: '500' }}>Inscrição</Menu.Item>
         </Menu>
