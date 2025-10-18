@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import { WhatsAppOutlined, MailOutlined } from '@ant-design/icons';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
+import Eventos from './Pages/Home/Eventos';
 import Servicos from './Pages/Servicos/Servicos';
 import CursosInternacionais from './Pages/Cursos/CursosInternacionais';
 import Sobre from './Pages/Sobre/Sobre';
@@ -115,6 +116,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/eventos" element={<Eventos />} />
             <Route path="/servicos" element={<Servicos />} />
             <Route path="/cursos" element={<CursosInternacionais />} />
             <Route path="/sobre" element={<Sobre />} />

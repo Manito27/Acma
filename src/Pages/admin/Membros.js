@@ -5,7 +5,7 @@ const Membros = () => {
   const [membros] = useState([
     {
       key: "1",
-      nome: "João Manuel",
+      nome: "João Manuel macuacuaa....",
       email: "joao@email.com",
     },
     {
