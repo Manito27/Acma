@@ -12,8 +12,7 @@ import Inscricao from './Pages/Inscricao/F_nscricao';
 import Consulta from './Pages/Consulta/Consulta';
 import SalaOnline from './Pages/Sala/SalaOnline';
 
-
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const App = () => {
   const navigate = useNavigate();
@@ -27,32 +26,34 @@ const App = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', backgroundColor: '#fff' }}>
       {/* Navbar */}
       <Header
         style={{
           position: 'sticky',
           top: 0,
-          zIndex: 1,
+          zIndex: 1000,
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: '#1565C0', // Azul mais escuro e elegante
+          backgroundColor: '#1565C0',
           justifyContent: 'space-between',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)', // Sombra suave
-          padding: '0 24px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+          padding: '0 48px',
           height: '64px',
-          lineHeight: '64px'
         }}
       >
         <div style={{ 
           fontWeight: 'bold', 
-          fontSize: '24px', 
+          fontSize: '28px', 
           color: '#fff',
-          textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
-          letterSpacing: '1px'
-        }}>
-          Acma
+          textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+          letterSpacing: '1.5px',
+          cursor: 'pointer'
+        }}
+        onClick={() => navigate('/')}
+        >
+          ACMA
         </div>
         <Menu
           theme="dark"
@@ -69,33 +70,46 @@ const App = () => {
           }}
           onClick={handleMenuClick}
         >
-          <Menu.Item key="home" style={{ fontWeight: '500' }}>Página Inicial</Menu.Item>
-          <Menu.Item key="servicos" style={{ fontWeight: '500' }}>Serviços</Menu.Item>
-          <Menu.Item key="cursos" style={{ fontWeight: '500' }}>Cursos</Menu.Item>
-          <Menu.Item key="Consulta" style={{ fontWeight: '500' }}>Consultar Certificado</Menu.Item>
-          <Menu.Item key="SalaOnline" style={{ fontWeight: '500' }}>Sala Online</Menu.Item>
-          <Menu.Item key="eventos" style={{ fontWeight: '500' }}>Eventos</Menu.Item>
-          <Menu.Item key="sobre" style={{ fontWeight: '500' }}>Sobre Nós</Menu.Item>
-          <Menu.Item key="inscricao" style={{ fontWeight: '500' }}>Inscrição</Menu.Item>
+          <Menu.Item key="home" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Página Inicial
+          </Menu.Item>
+          <Menu.Item key="servicos" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Serviços
+          </Menu.Item>
+          <Menu.Item key="cursos" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Cursos
+          </Menu.Item>
+          <Menu.Item key="Consulta" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Consultar Certificado
+          </Menu.Item>
+          <Menu.Item key="SalaOnline" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Sala Online
+          </Menu.Item>
+          <Menu.Item key="eventos" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Eventos
+          </Menu.Item>
+          <Menu.Item key="sobre" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Sobre Nós
+          </Menu.Item>
+          <Menu.Item key="inscricao" style={{ fontWeight: '500', fontSize: '15px' }}>
+            Inscrição
+          </Menu.Item>
         </Menu>
       </Header>
 
       {/* Conteúdo */}
       <Content
         style={{
-          padding: '0 48px',
-          marginTop: '2%',
+          padding: 0,
+          margin: 0,
           flex: 1,
-          marginBottom: '64px' // Espaço para o footer fixo
         }}
       >
         <div
           style={{
-            padding: 24,
-            minHeight: 380,
-            background: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+            padding: '32px 48px',
+            minHeight: 'calc(100vh - 64px)',
+            background: '#fff'
           }}
         >
           <Routes>
@@ -113,33 +127,6 @@ const App = () => {
         </div>
       </Content>
 
-      {/* Rodapé fixo */}
-      <Footer
-        style={{
-          textAlign: 'center',
-          backgroundColor: '#1565C0', // Mesmo azul da navbar
-          color: '#fff',
-          padding: '16px 20px',
-          fontWeight: '500',
-          position: 'fixed',
-          bottom: 0,
-          width: '100%',
-          boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
-          borderTop: '1px solid rgba(255,255,255,0.1)',
-          height: '64px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <div>
-          Acma ©{new Date().getFullYear()} - Acama LDA | 
-          <span style={{ marginLeft: '8px', opacity: '0.8' }}>
-            Todos os direitos reservados
-          </span>
-        </div>
-      </Footer>
-
       {/* Botão do WhatsApp */}
       <a
         href="https://wa.me/+258869926990"
@@ -149,23 +136,28 @@ const App = () => {
           position: 'fixed',
           width: '60px',
           height: '60px',
-          bottom: '80px',
+          bottom: '90px',
           right: '30px',
           backgroundColor: '#25D366',
           borderRadius: '50%',
           textAlign: 'center',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          boxShadow: '0 4px 12px rgba(37, 211, 102, 0.4)',
           color: 'white',
           fontSize: '30px',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.3s',
-          ':hover': {
-            transform: 'scale(1.1)',
-            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)'
-          }
+          transition: 'all 0.3s ease',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 211, 102, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.4)';
         }}
       >
         <WhatsAppOutlined />
@@ -178,23 +170,28 @@ const App = () => {
           position: 'fixed',
           width: '60px',
           height: '60px',
-          bottom: '10px',
+          bottom: '20px',
           right: '30px',
           backgroundColor: '#007BFF',
           borderRadius: '50%',
           textAlign: 'center',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          boxShadow: '0 4px 12px rgba(0, 123, 255, 0.4)',
           color: 'white',
           fontSize: '30px',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.3s',
-          ':hover': {
-            transform: 'scale(1.1)',
-            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)'
-          }
+          transition: 'all 0.3s ease',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 123, 255, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 123, 255, 0.4)';
         }}
       >
         <MailOutlined />
