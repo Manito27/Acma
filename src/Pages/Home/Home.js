@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
-import { ArrowRightOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Whash from '../../assets/img/Whash.jpg';
 import BigLifiting from '../../assets/img/BigLifiting.jpg';
@@ -71,10 +71,6 @@ const Home = () => {
         </div>
         <div className="hero-visual">
           <img src={evento1} alt="Formação técnica e segurança marítima" />
-          <div className="hero-note">
-            <span className="hero-note-icon"><SafetyCertificateOutlined /></span>
-            <span><strong>Aprendizagem aplicada</strong><small>Conhecimento para o terreno</small></span>
-          </div>
         </div>
       </div>
     </section>
