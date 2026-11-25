@@ -1,232 +1,123 @@
 import React, { useState } from 'react';
-import { List, Avatar, Button } from 'antd';
 import {
-  SafetyCertificateOutlined,
-  GlobalOutlined,
-  MedicineBoxOutlined,
-  ToolOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
   CloudOutlined,
+  MedicineBoxOutlined,
+  RocketOutlined,
+  SafetyCertificateOutlined,
   TeamOutlined,
-  CarOutlined,
-  RocketOutlined
+  ToolOutlined,
 } from '@ant-design/icons';
 
+const courses = [
+  {
+    title: 'HSE / ISO 14001 e ISO/IEC 9712',
+    category: 'Ambiente e qualidade',
+    description: 'Sistema de gestão ambiental e práticas de sustentabilidade.',
+    details: 'Introdução a sistemas de gestão ambiental, identificação de impactos e práticas para apoiar a conformidade e a melhoria contínua das operações.',
+    icon: <SafetyCertificateOutlined />,
+  },
+  {
+    title: 'OSHA, ISO 22000 e sistemas de gestão',
+    category: 'Segurança e qualidade',
+    description: 'Normas de gestão, segurança ocupacional e melhoria de processos.',
+    details: 'Formação introdutória em normas e sistemas de gestão, com temas de segurança ocupacional, qualidade, segurança alimentar e eficiência energética.',
+    icon: <SafetyCertificateOutlined />,
+  },
+  {
+    title: 'Legislação de petróleo e gás',
+    category: 'Petróleo e gás',
+    description: 'Enquadramento legal e regulatório para o setor energético.',
+    details: 'Aborda requisitos legais e regulatórios aplicáveis ao setor, conformidade, licenças e gestão de riscos em operações de petróleo e gás.',
+    icon: <CloudOutlined />,
+  },
+  {
+    title: 'BST, Oil and Gas Industrial',
+    category: 'Operações industriais',
+    description: 'Rigging, slinging e coordenação segura de cargas.',
+    details: 'Princípios de movimentação de cargas, sinalização, comunicação e coordenação de operações em ambientes industriais.',
+    icon: <ToolOutlined />,
+  },
+  {
+    title: 'Primeiros socorros e GMDSS',
+    category: 'Resposta a emergências',
+    description: 'Competências iniciais para resposta em contextos marítimos.',
+    details: 'Noções de primeiros socorros, resposta rápida e comunicação em emergência, com aplicação a ambientes marítimos e portuários.',
+    icon: <MedicineBoxOutlined />,
+  },
+  {
+    title: 'Logística e segurança marítima',
+    category: 'Logística',
+    description: 'Planeamento de operações e gestão eficiente de recursos.',
+    details: 'Planeamento de operações logísticas em ambientes marítimos, com atenção à segurança, gestão de recursos e procedimentos operacionais.',
+    icon: <RocketOutlined />,
+  },
+  {
+    title: 'IOSH, Big Lifting e WASH',
+    category: 'Operações e segurança',
+    description: 'Operação de equipamentos e práticas de segurança no trabalho.',
+    details: 'Técnicas para operação segura de equipamentos de elevação, prevenção de riscos e práticas de segurança no local de trabalho.',
+    icon: <TeamOutlined />,
+  },
+  {
+    title: 'Segurança em trabalhos em altura',
+    category: 'Segurança no trabalho',
+    description: 'Prevenção de quedas, utilização de EPI e controlo de riscos.',
+    details: 'Princípios de prevenção de quedas, seleção e utilização de equipamento de proteção individual e avaliação de riscos em altura.',
+    icon: <SafetyCertificateOutlined />,
+  },
+];
+
 const Cursos = () => {
-  const [selectedCurso, setSelectedCurso] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  const cursosPrincipais = [
-    {
-      title: 'HSE/ ISO 14001, ISO/IEC 9712',
-      description: 'SISTEMA DE GESTÃO AMBIENTAL',
-      details: 'Este curso aborda os fundamentos do Sistema de Gestão Ambiental com base nas normas ISO 14001 e ISO/IEC 9712. Os participantes aprendem a implementar práticas sustentáveis, gerenciar impactos ambientais e realizar auditorias para conformidade, promovendo a responsabilidade ambiental nas operações empresariais.',
-      icon: <SafetyCertificateOutlined />,
-      color: '#52c41a'
-    },
-    {
-      title: 'OSHA /ISO 18001, ISO 22000',
-      description: 'ISO/IEC 9001:2015, ISO 45001 a ISO 50001, outros',
-      details: 'Focado em normas internacionais como OSHA, ISO 18001, ISO 22000, ISO 9001:2015, ISO 45001 e ISO 50001, este curso capacita profissionais para implementar sistemas de gestão de qualidade, segurança e energia. Inclui treinamento em auditorias, conformidade e melhoria contínua de processos.',
-      icon: <GlobalOutlined />,
-      color: '#1890ff'
-    },
-    {
-      title: 'LEGISLAÇÃO DE PETRÓLEO e GÁS',
-      description: 'Curso especializado em legislação do setor',
-      details: 'Este curso especializado explora a legislação aplicável ao setor de petróleo e gás, abordando regulamentações nacionais e internacionais. Os participantes aprendem sobre conformidade legal, contratos, licenças e gestão de riscos regulatórios, essenciais para operações no setor energético.',
-      icon: <CloudOutlined />,
-      color: '#722ed1'
-    },
-    {
-      title: 'BST, OIL AND GAS INDUSTRIAL',
-      description: 'RIGGING SLINGING & BANKSMAN',
-      details: 'Focado em operações industriais de petróleo e gás, este curso cobre técnicas de rigging, slinging e banksman. Os participantes aprendem práticas seguras de movimentação de cargas, sinalização e coordenação em ambientes industriais, garantindo segurança e eficiência.',
-      icon: <ToolOutlined />,
-      color: '#fa8c16'
-    }
-  ];
-
-  const outrosCursos = [
-    {
-      title: 'PRIMEIRO SOCORRO GDMSS',
-      description: 'GESTÃO PORTUÁRIA',
-      details: 'Este curso combina treinamento em primeiros socorros com gestão portuária, preparando profissionais para lidar com emergências médicas em ambientes marítimos e portuários. Inclui técnicas de resposta rápida e gestão de crises, alinhadas às normas GDMSS.',
-      icon: <MedicineBoxOutlined />,
-      color: '#f5222d'
-    },
-    {
-      title: 'LOGÍSTICA MEAL',
-      description: 'SEGURANÇA MARÍTIMA',
-      details: 'Focado em logística e segurança marítima, este curso ensina a planejar operações logísticas em ambientes marítimos, com ênfase em segurança, conformidade com normas internacionais e gestão eficiente de recursos. Ideal para profissionais do setor portuário.',
-      icon: <RocketOutlined />,
-      color: '#13c2c2'
-    },
-    {
-      title: 'IOSH, BIG LIFTING WASH',
-      description: 'LIFTING OPERATOR',
-      details: 'Este curso capacita operadores de içamento (lifting) com base nas diretrizes IOSH e práticas de segurança WASH. Os participantes aprendem técnicas avançadas de operação de equipamentos de elevação, segurança no trabalho e manutenção preventiva.',
-      icon: <TeamOutlined />,
-      color: '#faad14'
-    },
-    {
-      title: 'SEGURANÇA EM ALTURA',
-      description: 'GENERAL MANAGING INDUSTRY',
-      details: 'Voltado para segurança em trabalhos em altura, este curso ensina técnicas de prevenção de quedas, uso de equipamentos de proteção individual (EPI) e gestão de riscos em ambientes industriais. Essencial para líderes e operadores em indústrias de alto risco.',
-      icon: <SafetyCertificateOutlined />,
-      color: '#52c41a'
-    }
-  ];
-
-  const handleCursoClick = (curso) => {
-    setSelectedCurso(curso);
-  };
-
-  const handleBackClick = () => {
-    setSelectedCurso(null);
-  };
-
-  return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      {selectedCurso ? (
-        <div>
-          <h2 style={{ 
-            color: '#1890ff', 
-            marginTop: '20px',
-            borderBottom: '1px solid #e8e8e8',
-            paddingBottom: '10px',
-            fontSize: '22px'
-          }}>
-            {selectedCurso.title}
-          </h2>
-          <div style={{
-            padding: '16px',
-            margin: '8px 0',
-            borderRadius: '4px',
-            border: '1px solid #f0f0f0',
-            backgroundColor: '#fff'
-          }}>
-            <p style={{ fontSize: '15px', color: '#666', marginBottom: '16px' }}>
-              {selectedCurso.details}
-            </p>
-            <Button
-              type="primary"
-              onClick={handleBackClick}
-              style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
-            >
-              Voltar aos Cursos
-            </Button>
-          </div>
+  return selectedCourse ? (
+    <main className="page-container page-container--narrow">
+      <button className="text-action" onClick={() => setSelectedCourse(null)}>
+        <ArrowLeftOutlined /> Voltar aos cursos
+      </button>
+      <div className="page-heading page-heading--left" style={{ marginTop: 20 }}>
+        <span className="eyebrow">{selectedCourse.category}</span>
+        <h1 className="page-title">{selectedCourse.title}</h1>
+        <p className="page-lead">{selectedCourse.description}</p>
+      </div>
+      <section className="detail-panel detail-panel-content">
+        <span className="catalog-icon">{selectedCourse.icon}</span>
+        <h2>Sobre o curso</h2>
+        <p>{selectedCourse.details}</p>
+        <div className="detail-fact"><strong>Informações e inscrições</strong><span>Contacte a ACMA para consultar disponibilidade, calendário e condições.</span></div>
+      </section>
+    </main>
+  ) : (
+    <main>
+      <section className="page-hero-compact">
+        <div className="page-hero-inner">
+          <header className="page-heading">
+            <span className="eyebrow">Desenvolvimento profissional</span>
+            <h1 className="page-title">Cursos e capacitação</h1>
+            <p className="page-lead">Programas para desenvolver competências técnicas em segurança, operações e gestão.</p>
+          </header>
         </div>
-      ) : (
-        <>
-          <h2 style={{ 
-            color: '#1890ff', 
-            marginTop: '20px',
-            borderBottom: '1px solid #e8e8e8',
-            paddingBottom: '10px',
-            fontSize: '22px'
-          }}>
-            Cursos Principais
-          </h2>
-
-          <List
-            itemLayout="horizontal"
-            dataSource={cursosPrincipais}
-            renderItem={(item) => (
-              <List.Item 
-                onClick={() => handleCursoClick(item)}
-                style={{
-                  cursor: 'pointer',
-                  padding: '16px',
-                  margin: '8px 0',
-                  borderRadius: '4px',
-                  transition: 'all 0.3s',
-                  border: '1px solid #f0f0f0',
-                  ':hover': {
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    transform: 'translateY(-2px)',
-                    borderColor: '#1890ff'
-                  }
-                }}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar 
-                      icon={item.icon} 
-                      style={{ 
-                        backgroundColor: item.color,
-                        fontSize: '20px'
-                      }} 
-                      size="large"
-                    />
-                  }
-                  title={<span style={{ fontSize: '18px', fontWeight: '500' }}>{item.title}</span>}
-                  description={<span style={{ fontSize: '15px' }}>{item.description}</span>}
-                />
-              </List.Item>
-            )}
-          />
-
-          <h2 style={{ 
-            color: '#1890ff', 
-            marginTop: '30px',
-            borderBottom: '1px solid #e8e8e8',
-            paddingBottom: '10px',
-            fontSize: '22px'
-          }}>
-            Mais Cursos Disponíveis
-          </h2>
-
-          <List
-            itemLayout="horizontal"
-            dataSource={outrosCursos}
-            renderItem={(item) => (
-              <List.Item 
-                onClick={() => handleCursoClick(item)}
-                style={{
-                  cursor: 'pointer',
-                  padding: '16px',
-                  margin: '8px 0',
-                  borderRadius: '4px',
-                  transition: 'all 0.3s',
-                  border: '1px solid #f0f0f0',
-                  ':hover': {
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    transform: 'translateY(-2px)',
-                    borderColor: '#1890ff'
-                  }
-                }}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar 
-                      icon={item.icon} 
-                      style={{ 
-                        backgroundColor: item.color,
-                        fontSize: '20px'
-                      }} 
-                      size="large"
-                    />
-                  }
-                  title={<span style={{ fontSize: '18px', fontWeight: '500' }}>{item.title}</span>}
-                  description={<span style={{ fontSize: '15px' }}>{item.description}</span>}
-                />
-              </List.Item>
-            )}
-          />
-
-          <div style={{ 
-            textAlign: 'center', 
-            marginTop: '40px',
-            color: '#666',
-            fontSize: '14px',
-            borderTop: '1px solid #f0f0f0',
-            paddingTop: '20px'
-          }}>
-            PRODUZIDO PELO GRUPO DA ACMA, LDA {new Date().getFullYear()}
-          </div>
-        </>
-      )}
-    </div>
+      </section>
+      <section className="page-container" style={{ paddingTop: 42 }}>
+        <div className="catalog-grid">
+          {courses.map((course) => (
+            <article className="catalog-card" key={course.title}>
+              <div className="catalog-card-body">
+                <span className="catalog-icon">{course.icon}</span>
+                <span className="eyebrow">{course.category}</span>
+                <h3>{course.title}</h3>
+                <p>{course.description}</p>
+                <button className="text-action" onClick={() => setSelectedCourse(course)}>
+                  Consultar curso <ArrowRightOutlined />
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 };
 

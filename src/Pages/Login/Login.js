@@ -1,94 +1,79 @@
-// src/Pages/Login/Login.js
-
-import React from 'react';
-import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-
-const { Title } = Typography;
+import React, { useState } from 'react';
+import { Button, Form, Input, message } from 'antd';
+import { CheckCircleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearAuthSession, login, resolveLoginRole, saveAuthSession } from '../../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  // Função que é chamada quando o formulário é submetido com sucesso
-  const onFinish = (values) => {
-    console.log('Dados recebidos do formulário: ', values);
-    
-    // --- LÓGICA DE AUTENTICAÇÃO ---
-    // Aqui você deve adicionar a sua lógica real de autenticação.
-    // Por exemplo, verificar se 'values.username' e 'values.password' são corretos.
-    
-    // Exemplo simples de validação:
-    if (values.username === 'admin' && values.password === 'password') {
-      message.success('Login bem-sucedido!');
-      // Redireciona para uma página de dashboard ou para a página inicial após o login
-      navigate('/home'); 
-    } else {
-      message.error('Nome de usuário ou senha incorretos!');
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      const response = await login({ username: values.username, password: values.password });
+      const role = resolveLoginRole(response);
+
+      if (!role) {
+        clearAuthSession();
+        message.error('O servidor autenticou o utilizador, mas não devolveu o perfil admin ou utente.');
+        return;
+      }
+
+      saveAuthSession(response, role);
+      message.success('Sessão iniciada.');
+      navigate(role === 'admin' ? '/admin' : '/utente');
+    } catch (error) {
+      if (error.response?.status === 400 || error.response?.status === 401) {
+        const detail = error.response.data?.detail ?? error.response.data?.message;
+        message.error(typeof detail === 'string' ? detail : 'Nome de utilizador ou palavra-passe incorretos.');
+      } else if (error.response) {
+        message.error('Não foi possível iniciar sessão. Tente novamente mais tarde.');
+      } else {
+        message.error('Não foi possível ligar ao servidor Django em execução local.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    // Container para centralizar o card de login na tela
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      padding: '50px 0' // Adiciona um espaçamento vertical
-    }}>
-      <Card 
-        title={
-          <Title level={2} style={{ textAlign: 'center', marginBottom: 0 }}>
-            Área de Acesso
-          </Title>
-        }
-        style={{ 
-          width: 400, 
-          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-          borderRadius: '8px'
-        }}
-      >
-        <Form
-          name="login_form"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          size="large" // Deixa os campos maiores e mais fáceis de usar
-        >
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: 'Por favor, insira seu nome de usuário!' }]}
+    <main className="auth-page">
+      <section className="auth-story">
+        <span className="eyebrow">Área do utilizador</span>
+        <h1>Bem-vindo de volta à ACMA.</h1>
+        <p>Entre com a sua conta ACMA. O servidor encaminha cada perfil para a respetiva área.</p>
+        <div className="auth-benefits">
+          <span><CheckCircleOutlined /> Acesso aos serviços da ACMA</span>
+          <span><CheckCircleOutlined /> Acompanhamento de formações</span>
+          <span><CheckCircleOutlined /> Consulta de informação e certificados</span>
+        </div>
+      </section>
+      <section className="auth-form-area">
+        <div className="auth-card">
+          <span className="eyebrow">Entrar na plataforma</span>
+          <h2>Iniciar sessão</h2>
+          <p>Introduza os seus dados de acesso para continuar.</p>
+          <Form
+            name="login_form"
+            layout="vertical"
+            onFinish={onFinish}
+            size="large"
+            autoComplete="on"
           >
-            <Input 
-              prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />} 
-              placeholder="Nome de Usuário" 
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Por favor, insira sua senha!' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-              type="password"
-              placeholder="Senha"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <a className="login-form-forgot" href="/esqueci-senha" style={{ float: 'right' }}>
-              Esqueceu a senha?
-            </a>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-              Entrar
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
+            <Form.Item name="username" label="Nome de utilizador" rules={[{ required: true, message: 'Indique o seu nome de utilizador.' }]}>
+              <Input prefix={<UserOutlined />} placeholder="O seu utilizador" autoComplete="username" />
+            </Form.Item>
+            <Form.Item name="password" label="Palavra-passe" rules={[{ required: true, message: 'Indique a sua palavra-passe.' }]}>
+              <Input.Password prefix={<LockOutlined />} placeholder="A sua palavra-passe" autoComplete="current-password" />
+            </Form.Item>
+            <div className="auth-help"><Link to="/suporte">Precisa de ajuda para aceder?</Link></div>
+            <Button type="primary" htmlType="submit" block loading={loading}>Entrar</Button>
+          </Form>
+          <div className="auth-footnote">Ainda não tem registo? <Link to="/inscricao">Faça a sua inscrição</Link>.</div>
+        </div>
+      </section>
+    </main>
   );
 };
 

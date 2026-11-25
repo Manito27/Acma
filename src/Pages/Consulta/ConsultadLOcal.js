@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Modal } from 'antd';
+import { getBackendFileUrl, getUtenteCertificados } from '../../services/api';
 
 const CertificateQueryForm = () => {
   const [form] = Form.useForm();
@@ -10,16 +11,13 @@ const CertificateQueryForm = () => {
     const { email, nuit } = values;
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/cliente-certificados/');
-      if (!response.ok) throw new Error('Erro ao consultar API');
-
-      const data = await response.json();
+      const data = await getUtenteCertificados();
 
       // Filtra por email e NUIT do cliente
       const found = data.find(
         (item) =>
-          item.cliente.email.toLowerCase() === email.toLowerCase() &&
-          item.cliente.nuit === nuit
+          (item.utente?.email ?? item.cliente?.email ?? item.email)?.toLowerCase() === email.toLowerCase() &&
+          String(item.utente?.nuit ?? item.cliente?.nuit ?? item.nuit) === String(nuit)
       );
 
       if (found) {
@@ -36,21 +34,26 @@ const CertificateQueryForm = () => {
   };
 
   const handleDownload = () => {
-    if (!certificate?.certificado?.arquivos) {
+    const filePath = certificate?.certificado?.arquivos ?? certificate?.certificate?.arquivos ?? certificate?.arquivos;
+    if (!filePath) {
       message.error('Arquivo do certificado não disponível!');
       return;
     }
-    window.open(`http://127.0.0.1:8000${certificate.certificado.arquivos}`, '_blank');
+    window.open(getBackendFileUrl(filePath), '_blank', 'noopener,noreferrer');
     message.success('Iniciando download do certificado...');
   };
 
   const handleView = () => {
-    if (!certificate?.certificado?.arquivos) {
+    const filePath = certificate?.certificado?.arquivos ?? certificate?.certificate?.arquivos ?? certificate?.arquivos;
+    if (!filePath) {
       message.error('Arquivo do certificado não disponível!');
       return;
     }
-    window.open(`http://127.0.0.1:8000${certificate.certificado.arquivos}`, '_blank');
+    window.open(getBackendFileUrl(filePath), '_blank', 'noopener,noreferrer');
   };
+
+  const linkedUtente = certificate?.utente ?? certificate?.cliente ?? {};
+  const certificateDetails = certificate?.certificado ?? certificate?.certificate ?? certificate ?? {};
 
   return (
     <>
@@ -110,26 +113,26 @@ const CertificateQueryForm = () => {
         {certificate && (
           <>
             <p>
-              <strong>Cliente:</strong> {certificate.cliente.nome} {certificate.cliente.apelido}
+              <strong>Utente:</strong> {linkedUtente.nome} {linkedUtente.apelido}
             </p>
             <p>
-              <strong>Email:</strong> {certificate.cliente.email}
+              <strong>Email:</strong> {linkedUtente.email}
             </p>
             <p>
-              <strong>NUIT:</strong> {certificate.cliente.nuit}
+              <strong>NUIT:</strong> {linkedUtente.nuit}
             </p>
             <hr />
             <p>
-              <strong>Certificado:</strong> {certificate.certificado.titulo}
+              <strong>Certificado:</strong> {certificateDetails.titulo || certificateDetails.nome}
             </p>
             <p>
-              <strong>Descrição:</strong> {certificate.certificado.descricao || 'N/A'}
+              <strong>Descrição:</strong> {certificateDetails.descricao || 'N/A'}
             </p>
             <p>
-              <strong>Data de Emissão:</strong> {certificate.certificado.data_emissao}
+              <strong>Data de Emissão:</strong> {certificateDetails.data_emissao || '—'}
             </p>
             <p>
-              <strong>Validade:</strong> {certificate.certificado.validade || 'Indefinida'}
+              <strong>Validade:</strong> {certificateDetails.validade || 'Indefinida'}
             </p>
           </>
         )}

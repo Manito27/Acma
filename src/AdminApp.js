@@ -10,8 +10,6 @@ import Consultas from './Pages/admin/Consultas';
 
 //firebas config
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = initializeApp ({
   apiKey: "AIzaSyDAY377R-jjCUnmLLJJWqQg2AifRbtGAWM",

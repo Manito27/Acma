@@ -1,7 +1,12 @@
-import React from 'react';
-import { Layout, Menu } from 'antd';
-import { WhatsAppOutlined, MailOutlined } from '@ant-design/icons';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Button, ConfigProvider, Drawer, Layout, Menu } from 'antd';
+import {
+  MailOutlined,
+  MenuOutlined,
+  PhoneOutlined,
+  WhatsAppOutlined,
+} from '@ant-design/icons';
+import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Eventos from './Pages/Home/Eventos';
 import Servicos from './Pages/Servicos/Servicos';
@@ -12,107 +17,120 @@ import Suporte from './Pages/Suporte/Suporte';
 import Inscricao from './Pages/Inscricao/F_nscricao';
 import Consulta from './Pages/Consulta/Consulta';
 import SalaOnline from './Pages/Sala/SalaOnline';
+import Login from './Pages/Login/Login';
+import MainUtente from './Pages/Utente/MainUtente';
+import MainAdmin from './Pages/admin/MainAdmin';
 
-const { Header, Content } = Layout;
+const { Content, Footer, Header } = Layout;
+
+const navItems = [
+  { key: 'home', label: 'Início', path: '/' },
+  { key: 'servicos', label: 'Serviços', path: '/servicos' },
+  { key: 'cursos', label: 'Cursos', path: '/cursos' },
+  { key: 'eventos', label: 'Eventos', path: '/eventos' },
+  { key: 'sobre', label: 'Sobre', path: '/sobre' },
+];
 
 const App = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const activeItem = navItems.find(({ path }) =>
+    path === '/' ? pathname === '/' || pathname === '/home' : pathname.toLowerCase().startsWith(path.toLowerCase())
+  );
+  const isUtenteArea = pathname.toLowerCase().startsWith('/utente');
+  const isAdminArea = pathname.toLowerCase().startsWith('/admin');
+  const isPrivateArea = isUtenteArea || isAdminArea;
+  const userRole = window.sessionStorage.getItem('acma-user-role');
+  const menuItems = navItems.map(({ key, label }) => ({ key, label }));
 
-  const handleMenuClick = (e) => {
-    if (e.keyPath.length > 1) {
-      navigate(`/${e.keyPath.reverse().join('/')}`);
-    } else {
-      navigate(`/${e.key}`);
-    }
+  const navigateFromMenu = ({ key }) => {
+    const item = navItems.find((navItem) => navItem.key === key);
+    if (item) navigate(item.path);
+    setMobileMenuOpen(false);
   };
 
   return (
-    <Layout style={{ minHeight: '100vh', backgroundColor: '#fff' }}>
-      {/* Navbar */}
-      <Header
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1000,
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#1565C0',
-          justifyContent: 'space-between',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-          padding: '0 48px',
-          height: '64px',
-        }}
-      >
-        <div style={{ 
-          fontWeight: 'bold', 
-          fontSize: '28px', 
-          color: '#fff',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-          letterSpacing: '1.5px',
-          cursor: 'pointer'
-        }}
-        onClick={() => navigate('/')}
-        >
-          ACMA
-        </div>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['home']}
-          style={{
-            flex: 1,
-            minWidth: 0,
-            justifyContent: 'flex-end',
-            display: 'flex',
-            backgroundColor: 'transparent',
-            border: 'none',
-            lineHeight: '64px'
-          }}
-          onClick={handleMenuClick}
-        >
-          <Menu.Item key="home" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Página Inicial
-          </Menu.Item>
-          <Menu.Item key="servicos" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Serviços
-          </Menu.Item>
-          <Menu.Item key="cursos" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Cursos
-          </Menu.Item>
-          <Menu.Item key="Consulta" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Consultar Certificado
-          </Menu.Item>
-          <Menu.Item key="SalaOnline" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Sala Online
-          </Menu.Item>
-          <Menu.Item key="eventos" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Eventos
-          </Menu.Item>
-          <Menu.Item key="sobre" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Sobre Nós
-          </Menu.Item>
-          <Menu.Item key="inscricao" style={{ fontWeight: '500', fontSize: '15px' }}>
-            Inscrição
-          </Menu.Item>
-        </Menu>
-      </Header>
+    <ConfigProvider theme={{
+      token: {
+        colorPrimary: '#155f84',
+        colorInfo: '#155f84',
+        colorText: '#1c2d3b',
+        colorTextSecondary: '#637585',
+        colorBorder: '#dce5ec',
+        colorBgLayout: '#f4f7fa',
+        borderRadius: 10,
+        fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        controlHeight: 44,
+      },
+      components: {
+        Button: { fontWeight: 600, primaryShadow: 'none' },
+        Menu: { itemBorderRadius: 8, itemSelectedColor: '#155f84', itemSelectedBg: '#eef6fa' },
+      },
+    }}>
+      <Layout className="site-layout">
+        {!isPrivateArea && <>
+        <Header className="site-header">
+          <div className="header-inner">
+            <Link to="/" className="brand" aria-label="ACMA, página inicial">
+              <span className="brand-mark">A</span>
+              <span className="brand-copy">
+                <strong>ACMA</strong>
+                <small>Consultoria &amp; Formação</small>
+              </span>
+            </Link>
 
-      {/* Conteúdo */}
-      <Content
-        style={{
-          padding: 0,
-          margin: 0,
-          flex: 1,
-        }}
-      >
-        <div
-          style={{
-            padding: '32px 48px',
-            minHeight: 'calc(100vh - 64px)',
-            background: '#fff'
-          }}
+            <nav className="desktop-nav" aria-label="Navegação principal">
+              <Menu
+                mode="horizontal"
+                selectedKeys={activeItem ? [activeItem.key] : []}
+                items={menuItems}
+                onClick={navigateFromMenu}
+              />
+            </nav>
+
+            <div className="header-actions">
+              <Button className="header-register" onClick={() => navigate('/inscricao')}>
+                Inscrever-se
+              </Button>
+              <Button type="primary" className="header-login" onClick={() => navigate('/login')}>
+                Entrar
+              </Button>
+              <Button
+                className="mobile-menu-trigger"
+                aria-label="Abrir menu"
+                icon={<MenuOutlined />}
+                onClick={() => setMobileMenuOpen(true)}
+              />
+            </div>
+          </div>
+        </Header>
+
+        <Drawer
+          title={<span className="drawer-brand">ACMA <small>Consultoria &amp; Formação</small></span>}
+          placement="right"
+          open={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+          width={320}
         >
+          <Menu
+            mode="vertical"
+            selectedKeys={activeItem ? [activeItem.key] : []}
+            items={menuItems}
+            onClick={navigateFromMenu}
+          />
+          <div className="drawer-actions">
+            <Button block onClick={() => { navigate('/inscricao'); setMobileMenuOpen(false); }}>
+              Inscrever-se
+            </Button>
+            <Button block type="primary" onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}>
+              Entrar
+            </Button>
+          </div>
+        </Drawer>
+        </>}
+
+        <Content className={isPrivateArea ? 'site-content user-content' : 'site-content'}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
@@ -125,80 +143,52 @@ const App = () => {
             <Route path="/inscricao" element={<Inscricao />} />
             <Route path="/Consulta" element={<Consulta />} />
             <Route path="/SalaOnline" element={<SalaOnline />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/utente/*" element={userRole === 'utente' ? <MainUtente /> : <Navigate to="/login" replace />} />
+            <Route path="/admin/*" element={userRole === 'admin' ? <MainAdmin /> : <Navigate to="/login" replace />} />
+            <Route path="*" element={<Home />} />
           </Routes>
-        </div>
-      </Content>
+        </Content>
 
-      {/* Botão do WhatsApp */}
-      <a
-        href="https://wa.me/+258869926990"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: 'fixed',
-          width: '60px',
-          height: '60px',
-          bottom: '90px',
-          right: '30px',
-          backgroundColor: '#25D366',
-          borderRadius: '50%',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(37, 211, 102, 0.4)',
-          color: 'white',
-          fontSize: '30px',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'all 0.3s ease',
-          cursor: 'pointer'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 211, 102, 0.5)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.4)';
-        }}
-      >
-        <WhatsAppOutlined />
-      </a>
+        {!isPrivateArea && <>
+        <Footer className="site-footer">
+          <div className="footer-inner">
+            <div className="footer-brand-block">
+              <Link to="/" className="footer-brand">ACMA</Link>
+              <p>Consultoria, formação profissional e soluções para empresas em Moçambique.</p>
+            </div>
+            <div className="footer-links">
+              <strong>Explore</strong>
+              <Link to="/servicos">Serviços</Link>
+              <Link to="/cursos">Cursos</Link>
+            </div>
+            <div className="footer-links">
+              <strong>Contactos</strong>
+              <a href="tel:+258869926990"><PhoneOutlined /> +258 86 992 6990</a>
+              <a href="mailto:geral@acmaconsultancy.com"><MailOutlined /> geral@acmaconsultancy.com</a>
+              <span>Maputo, Moçambique</span>
+              <Link to="/contactos">Fale connosco</Link>
+              <Link to="/suporte">Suporte</Link>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <span>© {new Date().getFullYear()} ACMA Consultoria, Lda.</span>
+            <span>Qualidade, segurança e desenvolvimento profissional.</span>
+          </div>
+        </Footer>
 
-      {/* Botão de Email */}
-      <a
-        href="mailto:geral@acmaconsultancy.com"
-        style={{
-          position: 'fixed',
-          width: '60px',
-          height: '60px',
-          bottom: '20px',
-          right: '30px',
-          backgroundColor: '#007BFF',
-          borderRadius: '50%',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(0, 123, 255, 0.4)',
-          color: 'white',
-          fontSize: '30px',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'all 0.3s ease',
-          cursor: 'pointer'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 123, 255, 0.5)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 123, 255, 0.4)';
-        }}
-      >
-        <MailOutlined />
-      </a>
-    </Layout>
+        <a
+          className="contact-float contact-float-whatsapp"
+          href="https://wa.me/258869926990"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Contactar a ACMA por WhatsApp"
+        >
+          <WhatsAppOutlined />
+        </a>
+        </>}
+      </Layout>
+    </ConfigProvider>
   );
 };
 

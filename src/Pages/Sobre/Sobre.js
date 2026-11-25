@@ -1,165 +1,74 @@
-import React from "react";
-import { Layout, Row, Col, Card, Typography, Divider } from "antd";
-import {
-  SafetyCertificateOutlined,
-  LaptopOutlined,
-  TeamOutlined,
-  DeploymentUnitOutlined,
-} from "@ant-design/icons";
+import React from 'react';
+import { SafetyCertificateOutlined, LaptopOutlined, TeamOutlined, DeploymentUnitOutlined } from '@ant-design/icons';
 
-const { Content } = Layout;
-const { Title, Paragraph } = Typography;
+const pillars = [
+  {
+    title: 'Segurança e prevenção',
+    description: 'Apoio às organizações na identificação de riscos e na adoção de práticas de trabalho seguras.',
+    icon: <SafetyCertificateOutlined />,
+  },
+  {
+    title: 'Formação aplicada',
+    description: 'Programas orientados para desenvolver competências técnicas úteis no contexto profissional.',
+    icon: <TeamOutlined />,
+  },
+  {
+    title: 'Soluções integradas',
+    description: 'Consultoria em gestão, qualidade, logística e desenvolvimento organizacional.',
+    icon: <DeploymentUnitOutlined />,
+  },
+  {
+    title: 'Acesso digital',
+    description: 'Serviços e informação disponíveis online para facilitar o contacto com a ACMA.',
+    icon: <LaptopOutlined />,
+  },
+];
 
-const AboutWebsite = () => {
-  return (
-    <Layout style={{ background: "#fff", padding: "60px 0" }}>
-      <Content
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 20px",
-        }}
-      >
-        <Title
-          level={1}
-          style={{
-            textAlign: "center",
-            marginBottom: "50px",
-            color: "#1565C0",
-            fontWeight: 700,
-          }}
-        >
-          Sobre a Plataforma ACMA
-        </Title>
+const Sobre = () => (
+  <main>
+    <section className="page-hero-compact">
+      <div className="page-hero-inner">
+        <header className="page-heading">
+          <span className="eyebrow">Quem somos</span>
+          <h1 className="page-title">Conhecimento que fortalece organizações</h1>
+          <p className="page-lead">A ACMA, Lda. é uma empresa moçambicana de consultoria e formação, comprometida com o desenvolvimento de pessoas e empresas.</p>
+        </header>
+      </div>
+    </section>
 
-        <Row justify="center">
-          <Col xs={24} md={20}>
-            <Card
-              style={{
-                borderRadius: "12px",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-              }}
-              bodyStyle={{ padding: "32px" }}
-            >
-              <Paragraph style={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-                Bem-vindo à plataforma digital da <strong>ACMA, LDA</strong>, sua
-                parceira estratégica em consultoria especializada, formação
-                profissional e certificações internacionais. Nossa solução foi
-                desenvolvida para oferecer suporte integrado nos setores de{" "}
-                <strong>
-                  Telecomunicações, Informática, Segurança Ocupacional e Gestão
-                  de Qualidade.
-                </strong>
-              </Paragraph>
+    <section className="page-container">
+      <div className="mission-panel">
+        <div>
+          <span className="mission-label">A nossa missão</span>
+          <h2>Transformar desafios em capacidade de ação.</h2>
+        </div>
+        <p>
+          Desde 2020, apoiamos organizações com consultoria especializada, formação profissional
+          e soluções práticas. Trabalhamos em áreas como segurança ocupacional, qualidade,
+          telecomunicações, informática, recursos humanos e gestão operacional.
+        </p>
+      </div>
 
-              <Divider />
+      <div className="section-heading" style={{ marginTop: 58 }}>
+        <div><p className="section-caption">Como trabalhamos</p><h2>Profissionalismo em cada etapa</h2></div>
+        <p>O nosso trabalho combina conhecimento técnico, atenção ao contexto e colaboração próxima com cada cliente.</p>
+      </div>
+      <div className="about-pillars">
+        {pillars.map((pillar) => (
+          <article className="about-pillar" key={pillar.title}>
+            <span className="catalog-icon">{pillar.icon}</span>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.description}</p>
+          </article>
+        ))}
+      </div>
 
-              <Title level={2} style={{ color: "#1890ff", marginBottom: "16px" }}>
-                Nossa Missão Digital
-              </Title>
-              <Paragraph style={{ fontSize: "1.1rem" }}>
-                Democratizamos o acesso a:
-              </Paragraph>
+      <section className="about-quote">
+        <span className="eyebrow">O nosso propósito</span>
+        <p>“Combinamos experiência técnica e formação para apoiar operações mais seguras, equipas mais preparadas e organizações mais fortes.”</p>
+      </section>
+    </section>
+  </main>
+);
 
-              <ul style={{ fontSize: "1.05rem", lineHeight: "1.9" }}>
-                <li>Cursos internacionais reconhecidos (ISO, OSHA, STCW, IOSH)</li>
-                <li>Sistemas de consultoria e certificação para PMEs</li>
-                <li>Ferramentas de avaliação de riscos ocupacionais (IGAORHSW)</li>
-                <li>Gestão de recursos humanos e logística integrada</li>
-                <li>Monitoramento e implementação de normas de qualidade</li>
-              </ul>
-
-              <Divider />
-
-              <Title level={2} style={{ color: "#1890ff", marginBottom: "16px" }}>
-                Tecnologia e Profissionalismo
-              </Title>
-              <Paragraph style={{ fontSize: "1.1rem" }}>
-                A plataforma foi desenvolvida com tecnologia de ponta para
-                garantir:
-              </Paragraph>
-
-              <Row gutter={[24, 24]}>
-                <Col xs={24} md={12}>
-                  <Card
-                    bordered={false}
-                    style={{
-                      background: "#f0f9ff",
-                      borderRadius: "10px",
-                      height: "100%",
-                    }}
-                  >
-                    <SafetyCertificateOutlined
-                      style={{ fontSize: "32px", color: "#1565C0" }}
-                    />
-                    <Title level={4} style={{ marginTop: "10px", color: "#1565C0" }}>
-                      Segurança de Dados
-                    </Title>
-                    <Paragraph>
-                      Proteção avançada para todas as suas informações e
-                      certificações.
-                    </Paragraph>
-                  </Card>
-                </Col>
-
-                <Col xs={24} md={12}>
-                  <Card
-                    bordered={false}
-                    style={{
-                      background: "#f0f9ff",
-                      borderRadius: "10px",
-                      height: "100%",
-                    }}
-                  >
-                    <LaptopOutlined
-                      style={{ fontSize: "32px", color: "#1565C0" }}
-                    />
-                    <Title level={4} style={{ marginTop: "10px", color: "#1565C0" }}>
-                      Acesso Multiplataforma
-                    </Title>
-                    <Paragraph>
-                      Disponível em qualquer dispositivo, a qualquer momento.
-                    </Paragraph>
-                  </Card>
-                </Col>
-              </Row>
-
-              <Divider />
-
-              <Paragraph style={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-                Nossa equipe de especialistas está comprometida em fornecer{" "}
-                <strong>conteúdo atualizado</strong> e{" "}
-                <strong>suporte técnico especializado</strong>, garantindo uma
-                experiência produtiva e eficiente na sua jornada conosco.
-              </Paragraph>
-
-              <Card
-                style={{
-                  background: "#e6f7ff",
-                  borderLeft: "4px solid #1890ff",
-                  borderRadius: "8px",
-                  marginTop: "30px",
-                }}
-              >
-                <Paragraph
-                  style={{
-                    fontSize: "1.15rem",
-                    fontStyle: "italic",
-                    margin: 0,
-                    color: "#0d47a1",
-                  }}
-                >
-                  "Na ACMA, combinamos expertise técnica com inovação digital
-                  para transformar desafios organizacionais em oportunidades de
-                  crescimento sustentável."
-                </Paragraph>
-              </Card>
-            </Card>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
-  );
-};
-
-export default AboutWebsite;
+export default Sobre;
