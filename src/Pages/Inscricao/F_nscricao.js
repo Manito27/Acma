@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
-import { IdcardOutlined, MailOutlined, PhoneOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
+import { IdcardOutlined, LockOutlined, MailOutlined, PhoneOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
 import { createUtente } from '../../services/api';
 
 const Inscricao = () => {
@@ -13,6 +13,8 @@ const Inscricao = () => {
       const response = await createUtente({
         nome: values.nome,
         apelido: values.apelido,
+        username: values.username,
+        password: values.password,
         nuit: values.nuit,
         email: values.email,
         telefone: values.telefone || null,
@@ -28,6 +30,9 @@ const Inscricao = () => {
         const errors = error.response.data;
         if (errors.nuit) message.error('Este NUIT já está registado.');
         else if (errors.email) message.error('Este e-mail já está registado.');
+        else if (errors.username) message.error('Este username ja esta registado ou nao e valido.');
+        else if (errors.password) message.error('A password deve ter pelo menos 8 caracteres.');
+        else if (errors.non_field_errors) message.error(errors.non_field_errors[0]);
         else message.error('Verifique os dados e tente novamente.');
       } else if (error.response) {
         message.error('Não foi possível concluir a inscrição. Tente novamente mais tarde.');
@@ -62,6 +67,28 @@ const Inscricao = () => {
           <div className="form-card-heading"><h2>Dados pessoais</h2><p>Preencha os campos para concluir o registo.</p></div>
           <Form form={form} name="inscricao_cliente" layout="vertical" onFinish={onFinish} autoComplete="off" requiredMark="optional">
             <div className="registration-grid">
+              <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Indique um username.' }, { min: 3, max: 150, message: 'O username deve ter entre 3 e 150 caracteres.' }]}>
+                <Input prefix={<UserOutlined />} placeholder="Escolha um username" autoComplete="username" />
+              </Form.Item>
+              <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Indique uma password.' }, { min: 8, message: 'A password deve ter pelo menos 8 caracteres.' }]}>
+                <Input.Password prefix={<LockOutlined />} placeholder="Crie uma password" autoComplete="new-password" />
+              </Form.Item>
+              <Form.Item
+                label="Confirmar password"
+                name="confirmPassword"
+                dependencies={['password']}
+                rules={[
+                  { required: true, message: 'Confirme a sua password.' },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) return Promise.resolve();
+                      return Promise.reject(new Error('As passwords nao coincidem.'));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password prefix={<LockOutlined />} placeholder="Repita a password" autoComplete="new-password" />
+              </Form.Item>
               <Form.Item label="Nome" name="nome" rules={[{ required: true, message: 'Indique o seu nome.' }, { min: 2, message: 'Introduza pelo menos 2 caracteres.' }]}>
                 <Input prefix={<UserOutlined />} placeholder="O seu nome" autoComplete="given-name" />
               </Form.Item>

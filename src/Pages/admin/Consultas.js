@@ -3,6 +3,7 @@ import {
   Button,
   Descriptions,
   Form,
+  Grid,
   Input,
   Modal,
   Popconfirm,
@@ -91,6 +92,7 @@ const getErrorMessage = (error) => {
 };
 
 const Consultas = () => {
+  const screens = Grid.useBreakpoint();
   const [form] = Form.useForm();
   const [associationForm] = Form.useForm();
   const [certificados, setCertificados] = useState([]);
@@ -287,28 +289,29 @@ const Consultas = () => {
   };
 
   const columns = [
-    { title: 'Certificado', key: 'titulo', render: (_, record) => getCertificateTitle(record) },
+    { title: 'Certificado', key: 'titulo', width: 145, ellipsis: true, render: (_, record) => getCertificateTitle(record) },
     {
       title: 'Utentes associados',
       key: 'utentes',
+      width: 160,
+      ellipsis: true,
       render: (_, record) => {
         const holders = getRelatedUtentes(record);
         return holders.length ? holders.map(getUtenteName).join(', ') : 'Sem utentes associados';
       },
     },
-    { title: 'Emissão', key: 'emissao', render: (_, record) => formatDate(record.data_emissao) },
-    { title: 'Validade', key: 'validade', render: (_, record) => record.validade ? formatDate(record.validade) : 'Indefinida' },
+    { title: 'Emissão', key: 'emissao', width: 90, ellipsis: true, render: (_, record) => formatDate(record.data_emissao) },
+    { title: 'Validade', key: 'validade', width: 95, ellipsis: true, render: (_, record) => record.validade ? formatDate(record.validade) : 'Indefinida' },
     {
       title: 'Ações',
       key: 'acoes',
-      fixed: 'right',
-      width: 160,
+      width: 128,
       render: (_, record) => {
         const id = getId(record);
         const availableUtenteCount = getAvailableUtentes(record).length;
         const canAssociate = id != null && availableUtenteCount > 0;
         return (
-          <Space size={2}>
+          <Space size={0} className="admin-table-actions">
             <Tooltip title="Ver detalhes">
               <Button type="text" size="small" aria-label={`Ver detalhes de ${getCertificateTitle(record)}`} icon={<EyeOutlined />} onClick={() => setSelectedCertificate(record)} />
             </Tooltip>
@@ -367,8 +370,9 @@ const Consultas = () => {
         columns={columns}
         dataSource={filteredCertificates}
         loading={loading}
+        tableLayout="fixed"
         pagination={{ pageSize: 10, showSizeChanger: false }}
-        scroll={{ x: 1000 }}
+        scroll={screens.lg ? undefined : { x: 'max-content' }}
         locale={{ emptyText: loading ? 'A carregar certificados…' : search ? 'Nenhum certificado corresponde à pesquisa.' : 'Ainda não existem certificados.' }}
       />
 
@@ -424,18 +428,29 @@ const Consultas = () => {
         destroyOnClose
       >
         <Form form={associationForm} layout="vertical" onFinish={onAssociateUtente}>
-          <Form.Item name="utente" label="Utente" rules={[{ required: true, message: 'Selecione um utente.' }]}>
+          <Form.Item
+            name="utente"
+            label={`Utente${availableUtentes.length ? ` (${availableUtentes.length} disponiveis)` : ''}`}
+            extra={availableUtentes.length ? 'Todos os utentes disponiveis aparecem na lista.' : 'Nao existem utentes disponiveis para este certificado.'}
+            rules={[{ required: true, message: 'Selecione um utente.' }]}
+          >
             <Select
               showSearch
-              placeholder="Pesquise e selecione um utente"
+              loading={loading}
+              placeholder="Selecione um utente da lista"
               optionFilterProp="label"
-              notFoundContent="Não existem utentes disponíveis para associação."
               filterOption={(input, option) => normalizeSearch(option?.label).includes(normalizeSearch(input))}
+              notFoundContent={utentes.length ? 'Todos os utentes ja estao associados a este certificado.' : 'Ainda nao existem utentes registados.'}
               options={availableUtentes.map((utente) => {
                 const person = getPerson(utente);
+                const identifiers = [
+                  person.nuit && `NUIT ${person.nuit}`,
+                  person.email,
+                  person.username,
+                ].filter(Boolean);
                 return {
                   value: getId(utente),
-                  label: `${getUtenteName(utente)}${person.email ? ` · ${person.email}` : ''}`,
+                  label: [getUtenteName(utente), identifiers.join(' · ')].filter(Boolean).join(' · '),
                 };
               })}
             />

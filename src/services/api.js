@@ -1,6 +1,34 @@
 import axios from 'axios';
 
-const configuredApiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
+const browserHostname = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1';
+const browserOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://127.0.0.1:3000';
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isLoopbackHost = (hostname) => ['localhost', '127.0.0.1', '::1', '[::1]'].includes(hostname.toLowerCase());
+const defaultApiHostname = isLoopbackHost(browserHostname) ? '127.0.0.1' : browserHostname;
+let configuredApiUrl = process.env.REACT_APP_API_URL;
+
+if (isDevelopment) {
+  try {
+    const configuredUrl = configuredApiUrl ? new URL(configuredApiUrl) : null;
+    if (!configuredUrl || isLoopbackHost(configuredUrl.hostname)) {
+      configuredApiUrl = `${browserOrigin}${configuredUrl?.pathname || '/api'}`;
+    }
+  } catch {
+    // Keep relative API URLs as configured.
+  }
+} else if (configuredApiUrl && !isLoopbackHost(browserHostname)) {
+  try {
+    const configuredUrl = new URL(configuredApiUrl);
+    if (isLoopbackHost(configuredUrl.hostname)) {
+      configuredUrl.hostname = browserHostname;
+      configuredApiUrl = configuredUrl.toString();
+    }
+  } catch {
+    // Leave relative or custom API URLs as configured.
+  }
+}
+
+configuredApiUrl = configuredApiUrl || `http://${defaultApiHostname}:8000/api`;
 
 const api = axios.create({
   baseURL: configuredApiUrl.replace(/\/+$/, ''),
@@ -92,7 +120,7 @@ export const resolveLoginRole = (payload) => {
   return null;
 };
 
-export const saveAuthSession = (payload, role) => {
+export const saveAuthSession = (payload, role, loginUsername) => {
   const data = payload?.data ?? payload ?? {};
   const user = data.user ?? data.usuario ?? data.profile ?? data.perfil ?? data.utente ?? data.administrador ?? {};
   const accessToken = data.access ?? data.access_token ?? data.tokens?.access ?? user.access ?? user.access_token;
@@ -104,7 +132,7 @@ export const saveAuthSession = (payload, role) => {
 
   const profile = {
     id: user.id ?? user.pk ?? data.user_id ?? data.id,
-    username: user.username ?? data.username,
+    username: user.username ?? data.username ?? loginUsername,
     email: user.email ?? data.email,
     nome: user.nome ?? user.first_name ?? data.nome ?? data.first_name,
     apelido: user.apelido ?? user.last_name ?? data.apelido ?? data.last_name,
@@ -145,7 +173,7 @@ export const createUtente = (utente) => api.post('/utentes/', utente);
 export const updateUtente = (id, utente) => api.patch(`/utentes/${encodeURIComponent(id)}/`, utente);
 export const deleteUtente = (id) => api.delete(`/utentes/${encodeURIComponent(id)}/`);
 export const associateCertificateToUtente = (utenteId, certificadoId) =>
-  api.post('/utente-certificados/', { utente: utenteId, certificado: certificadoId });
+  api.post('/utente-certificados/', { utente_id: utenteId, certificado_id: certificadoId });
 export const getAdministradores = (params) => getCollection('/administradores/', params);
 export const getCertificados = (params) => getCollection('/certificados/', params);
 const prepareCertificatePayload = (certificado) => {
@@ -178,10 +206,37 @@ export const getUtenteCertificados = (params) => getCollection('/utente-certific
 
 export const getBackendFileUrl = (filePath) => {
   if (!filePath) return '';
-  if (/^https?:\/\//i.test(filePath)) return filePath;
+  if (/^https?:\/\//i.test(filePath)) {
+    const fileUrl = new URL(filePath);
+    if (isDevelopment && isLoopbackHost(fileUrl.hostname)) {
+      return `${browserOrigin}${fileUrl.pathname}${fileUrl.search}${fileUrl.hash}`;
+    }
+    return filePath;
+  }
 
   const apiOrigin = new URL(api.defaults.baseURL, window.location.origin).origin;
   return new URL(filePath, `${apiOrigin}/`).toString();
+};
+
+export const downloadBackendFile = async (filePath, fileName) => {
+  const fileUrl = getBackendFileUrl(filePath);
+  const { data } = await api.get(fileUrl, { responseType: 'blob' });
+  const urlFileName = new URL(fileUrl).pathname.split('/').filter(Boolean).pop();
+  let downloadName = fileName || urlFileName || 'certificado';
+  try {
+    downloadName = decodeURIComponent(downloadName);
+  } catch {
+    // Keep the original filename if it contains invalid URI encoding.
+  }
+
+  const blobUrl = URL.createObjectURL(data);
+  const link = document.createElement('a');
+  link.href = blobUrl;
+  link.download = downloadName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 };
 
 export default api;

@@ -20,7 +20,7 @@ const Login = () => {
         return;
       }
 
-      saveAuthSession(response, role);
+      saveAuthSession(response, role, values.username);
       message.success('Sessão iniciada.');
       navigate(role === 'admin' ? '/admin' : '/utente');
     } catch (error) {

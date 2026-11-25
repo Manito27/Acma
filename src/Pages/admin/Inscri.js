@@ -3,6 +3,7 @@ import {
   Button,
   Descriptions,
   Form,
+  Grid,
   Input,
   Modal,
   Popconfirm,
@@ -17,6 +18,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  FileProtectOutlined,
   LinkOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
@@ -26,6 +28,7 @@ import {
   deleteUtente,
   getCertificados,
   getUtentes,
+  getUtenteCertificados,
   updateUtente,
 } from '../../services/api';
 
@@ -79,6 +82,7 @@ const getErrorMessage = (error) => {
 };
 
 const Inscri = () => {
+  const screens = Grid.useBreakpoint();
   const [form] = Form.useForm();
   const [associationForm] = Form.useForm();
   const [utentes, setUtentes] = useState([]);
@@ -91,6 +95,10 @@ const Inscri = () => {
   const [editingUtente, setEditingUtente] = useState(null);
   const [associationUtente, setAssociationUtente] = useState(null);
   const [selectedUtente, setSelectedUtente] = useState(null);
+  const [certificatesUtente, setCertificatesUtente] = useState(null);
+  const [associatedCertificates, setAssociatedCertificates] = useState([]);
+  const [loadingAssociatedCertificates, setLoadingAssociatedCertificates] = useState(false);
+  const [associatedCertificatesError, setAssociatedCertificatesError] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [associationOpen, setAssociationOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
@@ -236,26 +244,69 @@ const Inscri = () => {
     }
   };
 
+  const openAssociatedCertificates = async (utente) => {
+    const utenteId = getRecordId(utente);
+    if (utenteId == null) return;
+
+    setCertificatesUtente(utente);
+    setAssociatedCertificates([]);
+    setAssociatedCertificatesError(false);
+    setLoadingAssociatedCertificates(true);
+    try {
+      const relations = await getUtenteCertificados();
+      const relatedCertificates = relations
+        .filter((relation) => {
+          const relatedUtente = relation.utente ?? relation.utente_id ?? relation.cliente ?? relation.usuario;
+          const relatedUtenteId = relatedUtente && typeof relatedUtente === 'object'
+            ? getRecordId(relatedUtente)
+            : relatedUtente;
+          return String(relatedUtenteId) === String(utenteId);
+        })
+        .map((relation) => relation.certificado ?? relation.certificate)
+        .filter((certificate) => certificate && typeof certificate === 'object')
+        .sort((left, right) => String(left.titulo ?? left.nome ?? '').localeCompare(String(right.titulo ?? right.nome ?? ''), 'pt-MZ'));
+      setAssociatedCertificates(relatedCertificates);
+    } catch (error) {
+      setAssociatedCertificatesError(true);
+      message.error(getErrorMessage(error));
+    } finally {
+      setLoadingAssociatedCertificates(false);
+    }
+  };
+
+  const closeAssociatedCertificates = () => {
+    setCertificatesUtente(null);
+    setAssociatedCertificates([]);
+    setAssociatedCertificatesError(false);
+  };
+
   const columns = [
-    { title: 'Nome', key: 'nome', render: (_, record) => getName(record) },
+    { title: 'Nome', key: 'nome', width: 114, ellipsis: true, render: (_, record) => getName(record) },
     {
       title: 'E-mail',
       key: 'email',
+      width: 134,
+      ellipsis: true,
       render: (_, record) => getPerson(record).email ?? '—',
     },
     {
       title: 'NUIT',
       key: 'nuit',
+      width: 88,
+      ellipsis: true,
       render: (_, record) => getPerson(record).nuit ?? '—',
     },
     {
       title: 'Registado em',
       key: 'data',
+      width: 90,
+      ellipsis: true,
       render: (_, record) => formatDate(record.data_criacao ?? record.created_at ?? record.data_inscricao),
     },
     {
       title: 'Estado',
       key: 'estado',
+      width: 82,
       render: (_, record) => {
         const status = record.estado ?? record.status ?? 'Registado';
         const color = /ativo|validado|aprovado/i.test(status) ? 'green' : /pendente/i.test(status) ? 'gold' : 'blue';
@@ -265,14 +316,16 @@ const Inscri = () => {
     {
       title: 'Ações',
       key: 'acoes',
-      fixed: 'right',
-      width: 160,
+      width: 144,
       render: (_, record) => {
         const id = getRecordId(record);
         return (
-          <Space size={2}>
+          <Space size={0} className="admin-table-actions">
             <Tooltip title="Ver detalhes">
               <Button type="text" size="small" aria-label={`Ver detalhes de ${getName(record)}`} icon={<EyeOutlined />} onClick={() => setSelectedUtente(record)} />
+            </Tooltip>
+            <Tooltip title="Ver certificados associados">
+              <Button type="text" size="small" aria-label={`Ver certificados associados de ${getName(record)}`} icon={<FileProtectOutlined />} disabled={id == null} onClick={() => openAssociatedCertificates(record)} />
             </Tooltip>
             <Tooltip title="Editar utente">
               <Button type="text" size="small" aria-label={`Editar ${getName(record)}`} icon={<EditOutlined />} disabled={id == null} onClick={() => openEditForm(record)} />
@@ -322,8 +375,9 @@ const Inscri = () => {
         columns={columns}
         dataSource={filteredUtentes}
         loading={loading}
+        tableLayout="fixed"
         pagination={{ pageSize: 10, showSizeChanger: false }}
-        scroll={{ x: 1050 }}
+        scroll={screens.lg ? undefined : { x: 'max-content' }}
         locale={{ emptyText: loading ? 'A carregar registos…' : search ? 'Nenhum utente corresponde à pesquisa.' : 'Ainda não existem utentes registados.' }}
       />
 
@@ -425,6 +479,34 @@ const Inscri = () => {
             </Descriptions.Item>
           </Descriptions>
         )}
+      </Modal>
+      <Modal
+        className="admin-associated-certificates-modal"
+        title={`Certificados associados${certificatesUtente ? ` — ${getName(certificatesUtente)}` : ''}`}
+        open={Boolean(certificatesUtente)}
+        onCancel={closeAssociatedCertificates}
+        footer={<Button onClick={closeAssociatedCertificates}>Fechar</Button>}
+        destroyOnClose
+        width={680}
+      >
+        <Table
+          rowKey={(certificate) => getRecordId(certificate) ?? `${certificate.titulo ?? certificate.nome ?? 'certificado'}-${certificate.data_emissao ?? ''}`}
+          columns={[
+            {
+              title: 'Certificado',
+              key: 'titulo',
+              ellipsis: true,
+              render: (_, certificate) => certificate.titulo ?? certificate.nome ?? certificate.codigo ?? 'Sem titulo',
+            },
+            { title: 'Emissao', key: 'data_emissao', width: 130, render: (_, certificate) => formatDate(certificate.data_emissao) },
+            { title: 'Validade', key: 'validade', width: 130, render: (_, certificate) => certificate.validade ? formatDate(certificate.validade) : 'Indefinida' },
+          ]}
+          dataSource={associatedCertificates}
+          loading={loadingAssociatedCertificates}
+          pagination={{ pageSize: 6, showSizeChanger: false }}
+          size="small"
+          locale={{ emptyText: loadingAssociatedCertificates ? 'A carregar certificados...' : associatedCertificatesError ? 'Nao foi possivel carregar os certificados associados.' : 'Este utente nao tem certificados associados.' }}
+        />
       </Modal>
     </section>
   );

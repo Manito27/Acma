@@ -8,12 +8,11 @@ import {
   LogoutOutlined,
   MenuOutlined,
   UserOutlined,
-  GlobalOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Consulta from '../Consulta/Consulta';
+import CertificadosUtente from './CertificadosUtente';
 import SalaOnline from '../Sala/SalaOnline';
 import { clearAuthSession, getCurrentUser } from '../../services/api';
 
@@ -23,7 +22,6 @@ const menuItems = [
   { key: 'inicio', icon: <HomeOutlined />, label: 'Início' },
   { key: 'certificados', icon: <FileProtectOutlined />, label: 'Certificados' },
   { key: 'sala-online', icon: <VideoCameraOutlined />, label: 'Sala Online' },
-  { key: 'homepage', icon: <GlobalOutlined />, label: 'HomePage' },
 ];
 
 const UtenteInicio = () => {
@@ -49,7 +47,7 @@ const UtenteInicio = () => {
           <h2>Certificados</h2>
           <p>Pesquise certificados associados ao seu e-mail e NUIT.</p>
           <Button type="primary" onClick={() => navigate('/utente/certificados')}>
-            Consultar certificados <ArrowRightOutlined />
+            Ver certificados associados <ArrowRightOutlined />
           </Button>
         </Card>
 
@@ -63,15 +61,6 @@ const UtenteInicio = () => {
           </Button>
         </Card>
 
-        <Card className="utente-shortcut-card utente-shortcut-card--soft" bordered={false}>
-          <span className="utente-shortcut-icon"><GlobalOutlined /></span>
-          <span className="utente-shortcut-label">Site institucional</span>
-          <h2>HomePage</h2>
-          <p>Explore os serviços, cursos e informações públicas da ACMA.</p>
-          <Button onClick={() => navigate('/')}>
-            Ir para o site <ArrowRightOutlined />
-          </Button>
-        </Card>
       </section>
 
       <Card className="utente-profile-card" bordered={false}>
@@ -104,7 +93,6 @@ const MainUtente = () => {
     if (key === 'inicio') navigate('/utente');
     if (key === 'certificados') navigate('/utente/certificados');
     if (key === 'sala-online') navigate('/utente/sala-online');
-    if (key === 'homepage') navigate('/');
   };
 
   const endSession = () => {
@@ -147,15 +135,11 @@ const MainUtente = () => {
       <Layout className="utente-workspace">
         <aside className="utente-sidebar">
           {menu('inline')}
-          <div className="utente-sidebar-help">
-            <span>Precisa de ajuda?</span>
-            <Link to="/suporte">Contactar o suporte</Link>
-          </div>
         </aside>
         <Content className="utente-content">
           <Routes>
             <Route index element={<UtenteInicio />} />
-            <Route path="certificados" element={<Consulta />} />
+            <Route path="certificados" element={<CertificadosUtente />} />
             <Route path="sala-online" element={<SalaOnline />} />
             <Route path="*" element={<UtenteInicio />} />
           </Routes>
@@ -171,10 +155,6 @@ const MainUtente = () => {
         width={300}
       >
         {menu('vertical')}
-        <div className="utente-sidebar-help">
-          <span>Precisa de ajuda?</span>
-          <Link to="/suporte" onClick={() => setDrawerOpen(false)}>Contactar o suporte</Link>
-        </div>
       </Drawer>
     </Layout>
   );
