@@ -7,6 +7,7 @@ import {
   WhatsAppOutlined,
 } from '@ant-design/icons';
 import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import logo from './assets/img/Logotipo.png';
 import Home from './Pages/Home/Home';
 import Eventos from './Pages/Home/Eventos';
 import Servicos from './Pages/Servicos/Servicos';
@@ -53,19 +54,19 @@ const App = () => {
   return (
     <ConfigProvider theme={{
       token: {
-        colorPrimary: '#155f84',
-        colorInfo: '#155f84',
-        colorText: '#1c2d3b',
-        colorTextSecondary: '#637585',
-        colorBorder: '#dce5ec',
-        colorBgLayout: '#f4f7fa',
+        colorPrimary: '#1c5fbd',
+        colorInfo: '#1c5fbd',
+        colorText: '#17304b',
+        colorTextSecondary: '#637a92',
+        colorBorder: '#dce7f3',
+        colorBgLayout: '#f5f8fc',
         borderRadius: 10,
         fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         controlHeight: 44,
       },
       components: {
         Button: { fontWeight: 600, primaryShadow: 'none' },
-        Menu: { itemBorderRadius: 8, itemSelectedColor: '#155f84', itemSelectedBg: '#eef6fa' },
+        Menu: { itemBorderRadius: 8, itemSelectedColor: '#1c5fbd', itemSelectedBg: '#edf4ff' },
       },
     }}>
       <Layout className="site-layout">
@@ -73,11 +74,7 @@ const App = () => {
         <Header className="site-header">
           <div className="header-inner">
             <Link to="/" className="brand" aria-label="ACMA, página inicial">
-              <span className="brand-mark">A</span>
-              <span className="brand-copy">
-                <strong>ACMA</strong>
-                <small>Consultoria &amp; Formação</small>
-              </span>
+              <img className="brand-logo brand-logo--header" src={logo} alt="ACMA LDA" />
             </Link>
 
             <nav className="desktop-nav" aria-label="Navegação principal">
@@ -154,7 +151,9 @@ const App = () => {
         <Footer className="site-footer">
           <div className="footer-inner">
             <div className="footer-brand-block">
-              <Link to="/" className="footer-brand">ACMA</Link>
+              <Link to="/" className="footer-brand" aria-label="ACMA, página inicial">
+                <img className="brand-logo brand-logo--footer" src={logo} alt="ACMA LDA" />
+              </Link>
               <p>Consultoria, formação profissional e soluções para empresas em Moçambique.</p>
             </div>
             <div className="footer-links">

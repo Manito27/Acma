@@ -75,13 +75,6 @@ const Home = () => {
       </div>
     </section>
 
-    <div className="trust-strip" aria-label="Áreas de atuação da ACMA">
-      <div className="trust-item"><strong>Formação</strong><span>Competências técnicas</span></div>
-      <div className="trust-item"><strong>Segurança</strong><span>Prevenção de riscos</span></div>
-      <div className="trust-item"><strong>Consultoria</strong><span>Soluções para empresas</span></div>
-      <div className="trust-item"><strong>Maputo</strong><span>Moçambique</span></div>
-    </div>
-
     <section className="section-block">
       <div className="section-inner">
         <div className="section-heading">

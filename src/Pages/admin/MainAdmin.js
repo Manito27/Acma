@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../../assets/img/Logotipo.png';
 import { Avatar, Button, Drawer, Layout, Menu } from 'antd';
 import {
   HomeOutlined,
@@ -70,8 +71,8 @@ const MainAdmin = () => {
             onClick={() => setDrawerOpen(true)}
           />
           <Link to="/admin" className="utente-brand admin-brand">
-            <span className="brand-mark">A</span>
-            <span><strong>ACMA</strong><small>Painel administrativo</small></span>
+            <img className="brand-logo brand-logo--compact" src={logo} alt="ACMA LDA" />
+            <span className="utente-brand-label"><small>Painel administrativo</small></span>
           </Link>
           <div className="utente-account">
             <Avatar icon={<UserOutlined />} />

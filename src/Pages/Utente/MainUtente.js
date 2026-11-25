@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../../assets/img/Logotipo.png';
 import { Avatar, Button, Card, Drawer, Layout, Menu } from 'antd';
 import {
   ArrowRightOutlined,
@@ -126,8 +127,8 @@ const MainUtente = () => {
             onClick={() => setDrawerOpen(true)}
           />
           <Link to="/utente" className="utente-brand">
-            <span className="brand-mark">A</span>
-            <span><strong>ACMA</strong><small>Área do utente</small></span>
+            <img className="brand-logo brand-logo--compact" src={logo} alt="ACMA LDA" />
+            <span className="utente-brand-label"><small>Área do utente</small></span>
           </Link>
           <div className="utente-account">
             <Avatar icon={<UserOutlined />} />
