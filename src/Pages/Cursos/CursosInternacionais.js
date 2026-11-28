@@ -9,6 +9,7 @@ import {
   TeamOutlined,
   ToolOutlined,
 } from '@ant-design/icons';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const courses = [
   {
@@ -71,22 +72,23 @@ const courses = [
 
 const Cursos = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const { t } = useLanguage();
 
   return selectedCourse ? (
     <main className="page-container page-container--narrow">
       <button className="text-action" onClick={() => setSelectedCourse(null)}>
-        <ArrowLeftOutlined /> Voltar aos cursos
+        <ArrowLeftOutlined /> {t('Voltar aos cursos')}
       </button>
       <div className="page-heading page-heading--left" style={{ marginTop: 20 }}>
-        <span className="eyebrow">{selectedCourse.category}</span>
-        <h1 className="page-title">{selectedCourse.title}</h1>
-        <p className="page-lead">{selectedCourse.description}</p>
+        <span className="eyebrow">{t(selectedCourse.category)}</span>
+        <h1 className="page-title">{t(selectedCourse.title)}</h1>
+        <p className="page-lead">{t(selectedCourse.description)}</p>
       </div>
       <section className="detail-panel detail-panel-content">
         <span className="catalog-icon">{selectedCourse.icon}</span>
-        <h2>Sobre o curso</h2>
-        <p>{selectedCourse.details}</p>
-        <div className="detail-fact"><strong>Informações e inscrições</strong><span>Contacte a ACMA para consultar disponibilidade, calendário e condições.</span></div>
+        <h2>{t('Sobre o curso')}</h2>
+        <p>{t(selectedCourse.details)}</p>
+        <div className="detail-fact"><strong>{t('Informações e inscrições')}</strong><span>{t('Contacte a ACMA para consultar disponibilidade, calendário e condições.')}</span></div>
       </section>
     </main>
   ) : (
@@ -94,9 +96,9 @@ const Cursos = () => {
       <section className="page-hero-compact">
         <div className="page-hero-inner">
           <header className="page-heading">
-            <span className="eyebrow">Desenvolvimento profissional</span>
-            <h1 className="page-title">Cursos e capacitação</h1>
-            <p className="page-lead">Programas para desenvolver competências técnicas em segurança, operações e gestão.</p>
+            <span className="eyebrow">{t('Desenvolvimento profissional')}</span>
+            <h1 className="page-title">{t('Cursos e capacitação')}</h1>
+            <p className="page-lead">{t('Programas para desenvolver competências técnicas em segurança, operações e gestão.')}</p>
           </header>
         </div>
       </section>
@@ -106,11 +108,11 @@ const Cursos = () => {
             <article className="catalog-card" key={course.title}>
               <div className="catalog-card-body">
                 <span className="catalog-icon">{course.icon}</span>
-                <span className="eyebrow">{course.category}</span>
-                <h3>{course.title}</h3>
-                <p>{course.description}</p>
+                <span className="eyebrow">{t(course.category)}</span>
+                <h3>{t(course.title)}</h3>
+                <p>{t(course.description)}</p>
                 <button className="text-action" onClick={() => setSelectedCourse(course)}>
-                  Consultar curso <ArrowRightOutlined />
+                  {t('Consultar curso')} <ArrowRightOutlined />
                 </button>
               </div>
             </article>

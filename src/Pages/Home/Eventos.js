@@ -4,6 +4,7 @@ import evento1 from '../../assets/img/evento1.jpg';
 import prevencaoIncendiosImg from '../../assets/img/prevencao-incendios.jpg';
 import sobrevivenciaMarImg from '../../assets/img/sobrevivencia-mar.jpg';
 import segurancaMaritimaImg from '../../assets/img/seguranca-maritima.jpg';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const events = [
   {
@@ -54,27 +55,28 @@ const events = [
 
 const Eventos = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const { t } = useLanguage();
 
   return selectedEvent ? (
     <main className="page-container">
       <button className="text-action" onClick={() => setSelectedEvent(null)}>
-        <ArrowLeftOutlined /> Voltar aos eventos
+        <ArrowLeftOutlined /> {t('Voltar aos eventos')}
       </button>
       <div className="page-heading page-heading--left" style={{ marginTop: 20 }}>
-        <span className="eyebrow">{selectedEvent.category}</span>
-        <h1 className="page-title">{selectedEvent.title}</h1>
-        <p className="page-lead">{selectedEvent.description}</p>
+        <span className="eyebrow">{t(selectedEvent.category)}</span>
+        <h1 className="page-title">{t(selectedEvent.title)}</h1>
+        <p className="page-lead">{t(selectedEvent.description)}</p>
       </div>
       <article className="detail-panel">
-        <img className="detail-panel-image" src={selectedEvent.image} alt={selectedEvent.title} />
+        <img className="detail-panel-image" src={selectedEvent.image} alt={t(selectedEvent.title)} />
         <div className="detail-panel-content">
-          <h2>Sobre a formação</h2>
-          <p>{selectedEvent.objective}</p>
+          <h2>{t('Sobre a formação')}</h2>
+          <p>{t(selectedEvent.objective)}</p>
           <div className="detail-facts">
-            <div className="detail-fact"><strong>Público-alvo</strong><span>{selectedEvent.audience}</span></div>
-            <div className="detail-fact"><strong>Duração</strong><span>{selectedEvent.duration}</span></div>
-            <div className="detail-fact"><strong>Conteúdos práticos</strong><span>{selectedEvent.benefit}</span></div>
-            <div className="detail-fact"><strong>Organização</strong><span>ACMA Consultoria, em parceria com entidades do setor.</span></div>
+            <div className="detail-fact"><strong>{t('Público-alvo')}</strong><span>{t(selectedEvent.audience)}</span></div>
+            <div className="detail-fact"><strong>{t('Duração')}</strong><span>{t(selectedEvent.duration)}</span></div>
+            <div className="detail-fact"><strong>{t('Conteúdos práticos')}</strong><span>{t(selectedEvent.benefit)}</span></div>
+            <div className="detail-fact"><strong>{t('Organização')}</strong><span>{t('ACMA Consultoria, em parceria com entidades do setor.')}</span></div>
           </div>
         </div>
       </article>
@@ -82,20 +84,20 @@ const Eventos = () => {
   ) : (
     <main className="page-container">
       <header className="page-heading">
-        <span className="eyebrow">Experiência no terreno</span>
-        <h1 className="page-title">Eventos e formações</h1>
-        <p className="page-lead">Conheça as iniciativas que promovem competências, prevenção e segurança em diferentes setores.</p>
+        <span className="eyebrow">{t('Experiência no terreno')}</span>
+        <h1 className="page-title">{t('Eventos e formações')}</h1>
+        <p className="page-lead">{t('Conheça as iniciativas que promovem competências, prevenção e segurança em diferentes setores.')}</p>
       </header>
       <div className="catalog-grid">
         {events.map((event) => (
           <article className="catalog-card" key={event.id}>
-            <img className="catalog-card-image" src={event.image} alt={event.title} />
+            <img className="catalog-card-image" src={event.image} alt={t(event.title)} />
             <div className="catalog-card-body">
-              <span className="eyebrow">{event.category}</span>
-              <h3>{event.title}</h3>
-              <p>{event.description}</p>
+              <span className="eyebrow">{t(event.category)}</span>
+              <h3>{t(event.title)}</h3>
+              <p>{t(event.description)}</p>
               <button className="text-action" onClick={() => setSelectedEvent(event)}>
-                Ver detalhes <ArrowRightOutlined />
+                {t('Ver detalhes')} <ArrowRightOutlined />
               </button>
             </div>
           </article>

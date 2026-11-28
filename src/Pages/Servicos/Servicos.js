@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeftOutlined, ArrowRightOutlined, AuditOutlined, SafetyCertificateOutlined, TeamOutlined, ToolOutlined } from '@ant-design/icons';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const services = [
   {
@@ -72,18 +73,19 @@ const services = [
 
 const Servicos = () => {
   const [selectedService, setSelectedService] = useState(null);
+  const { t } = useLanguage();
 
   if (selectedService) {
     return (
       <main className="page-container page-container--narrow">
         <button className="text-action" onClick={() => setSelectedService(null)}>
-          <ArrowLeftOutlined /> Voltar aos serviços
+          <ArrowLeftOutlined /> {t('Voltar aos serviços')}
         </button>
         <section className="detail-panel detail-panel-content" style={{ marginTop: 20 }}>
           <span className="catalog-icon">{selectedService.icon}</span>
-          <h2>{selectedService.title}</h2>
-          <p>{selectedService.details}</p>
-          <p>Fale com a nossa equipa para discutir os objetivos e o âmbito mais adequado para a sua organização.</p>
+          <h2>{t(selectedService.title)}</h2>
+          <p>{t(selectedService.details)}</p>
+          <p>{t('Fale com a nossa equipa para discutir os objetivos e o âmbito mais adequado para a sua organização.')}</p>
         </section>
       </main>
     );
@@ -94,9 +96,9 @@ const Servicos = () => {
       <section className="page-hero-compact">
         <div className="page-hero-inner">
           <header className="page-heading">
-            <span className="eyebrow">Soluções para organizações</span>
-            <h1 className="page-title">Serviços de consultoria e formação</h1>
-            <p className="page-lead">Apoiamos empresas com soluções práticas em formação, segurança, gestão e desenvolvimento operacional.</p>
+            <span className="eyebrow">{t('Soluções para organizações')}</span>
+            <h1 className="page-title">{t('Serviços de consultoria e formação')}</h1>
+            <p className="page-lead">{t('Apoiamos empresas com soluções práticas em formação, segurança, gestão e desenvolvimento operacional.')}</p>
           </header>
         </div>
       </section>
@@ -106,10 +108,10 @@ const Servicos = () => {
             <article className="catalog-card service-tile" key={service.title}>
               <div className="catalog-card-body">
                 <span className="catalog-icon">{service.icon}</span>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
+                <h3>{t(service.title)}</h3>
+                <p>{t(service.description)}</p>
                 <button className="text-action" onClick={() => setSelectedService(service)}>
-                  Saber mais <ArrowRightOutlined />
+                  {t('Saber mais')} <ArrowRightOutlined />
                 </button>
               </div>
             </article>

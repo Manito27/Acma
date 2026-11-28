@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button, ConfigProvider, Drawer, Layout, Menu } from 'antd';
+import enUS from 'antd/locale/en_US';
+import ptPT from 'antd/locale/pt_PT';
 import {
   MailOutlined,
   MenuOutlined,
@@ -21,21 +23,23 @@ import SalaOnline from './Pages/Sala/SalaOnline';
 import Login from './Pages/Login/Login';
 import MainUtente from './Pages/Utente/MainUtente';
 import MainAdmin from './Pages/admin/MainAdmin';
+import { useLanguage } from './i18n/LanguageContext';
+import LanguageSwitcher from './i18n/LanguageSwitcher';
 
 const { Content, Footer, Header } = Layout;
 
-const navItems = [
-  { key: 'home', label: 'Início', path: '/' },
-  { key: 'servicos', label: 'Serviços', path: '/servicos' },
-  { key: 'cursos', label: 'Cursos', path: '/cursos' },
-  { key: 'eventos', label: 'Eventos', path: '/eventos' },
-  { key: 'sobre', label: 'Sobre', path: '/sobre' },
-];
-
 const App = () => {
+  const { language, t } = useLanguage();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navItems = [
+    { key: 'home', label: t('Início'), path: '/' },
+    { key: 'servicos', label: t('Serviços'), path: '/servicos' },
+    { key: 'cursos', label: t('Cursos'), path: '/cursos' },
+    { key: 'eventos', label: t('Eventos'), path: '/eventos' },
+    { key: 'sobre', label: t('Sobre'), path: '/sobre' },
+  ];
   const activeItem = navItems.find(({ path }) =>
     path === '/' ? pathname === '/' || pathname === '/home' : pathname.toLowerCase().startsWith(path.toLowerCase())
   );
@@ -52,7 +56,7 @@ const App = () => {
   };
 
   return (
-    <ConfigProvider theme={{
+    <ConfigProvider locale={language === 'pt' ? ptPT : enUS} theme={{
       token: {
         colorPrimary: '#1c5fbd',
         colorInfo: '#1c5fbd',
@@ -73,11 +77,11 @@ const App = () => {
         {!isPrivateArea && <>
         <Header className="site-header">
           <div className="header-inner">
-            <Link to="/" className="brand" aria-label="ACMA, página inicial">
+            <Link to="/" className="brand" aria-label={t('ACMA, página inicial')}>
               <img className="brand-logo brand-logo--header" src={logo} alt="ACMA LDA" />
             </Link>
 
-            <nav className="desktop-nav" aria-label="Navegação principal">
+            <nav className="desktop-nav" aria-label={t('Navegação principal')}>
               <Menu
                 mode="horizontal"
                 selectedKeys={activeItem ? [activeItem.key] : []}
@@ -87,15 +91,16 @@ const App = () => {
             </nav>
 
             <div className="header-actions">
+              <LanguageSwitcher />
               <Button className="header-register" onClick={() => navigate('/inscricao')}>
-                Inscrever-se
+                {t('Inscrever-se')}
               </Button>
               <Button type="primary" className="header-login" onClick={() => navigate('/login')}>
-                Entrar
+                {t('Entrar')}
               </Button>
               <Button
                 className="mobile-menu-trigger"
-                aria-label="Abrir menu"
+                aria-label={t('Abrir menu')}
                 icon={<MenuOutlined />}
                 onClick={() => setMobileMenuOpen(true)}
               />
@@ -104,7 +109,7 @@ const App = () => {
         </Header>
 
         <Drawer
-          title={<span className="drawer-brand">ACMA <small>Consultoria &amp; Formação</small></span>}
+          title={<span className="drawer-brand">ACMA <small>{t('Consultoria & Formação')}</small></span>}
           placement="right"
           open={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
@@ -116,12 +121,13 @@ const App = () => {
             items={menuItems}
             onClick={navigateFromMenu}
           />
+          <div className="drawer-language"><LanguageSwitcher /></div>
           <div className="drawer-actions">
             <Button block onClick={() => { navigate('/inscricao'); setMobileMenuOpen(false); }}>
-              Inscrever-se
+              {t('Inscrever-se')}
             </Button>
             <Button block type="primary" onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}>
-              Entrar
+              {t('Entrar')}
             </Button>
           </div>
         </Drawer>
@@ -151,28 +157,28 @@ const App = () => {
         <Footer className="site-footer">
           <div className="footer-inner">
             <div className="footer-brand-block">
-              <Link to="/" className="footer-brand" aria-label="ACMA, página inicial">
+              <Link to="/" className="footer-brand" aria-label={t('ACMA, página inicial')}>
                 <img className="brand-logo brand-logo--footer" src={logo} alt="ACMA LDA" />
               </Link>
-              <p>Consultoria, formação profissional e soluções para empresas em Moçambique.</p>
+              <p>{t('Consultoria, formação profissional e soluções para empresas em Moçambique.')}</p>
             </div>
             <div className="footer-links">
-              <strong>Explore</strong>
-              <Link to="/servicos">Serviços</Link>
-              <Link to="/cursos">Cursos</Link>
+              <strong>{t('Explorar')}</strong>
+              <Link to="/servicos">{t('Serviços')}</Link>
+              <Link to="/cursos">{t('Cursos')}</Link>
             </div>
             <div className="footer-links">
-              <strong>Contactos</strong>
+              <strong>{t('Contactos')}</strong>
               <a href="tel:+258869926990"><PhoneOutlined /> +258 86 992 6990</a>
               <a href="mailto:geral@acmaconsultancy.com"><MailOutlined /> geral@acmaconsultancy.com</a>
-              <span>Maputo, Moçambique</span>
-              <Link to="/contactos">Fale connosco</Link>
-              <Link to="/suporte">Suporte</Link>
+              <span>{t('Maputo, Moçambique')}</span>
+              <Link to="/contactos">{t('Fale connosco')}</Link>
+              <Link to="/suporte">{t('Suporte')}</Link>
             </div>
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getFullYear()} ACMA Consultoria, Lda.</span>
-            <span>Qualidade, segurança e desenvolvimento profissional.</span>
+            <span>{t('Qualidade, segurança e desenvolvimento profissional.')}</span>
           </div>
         </Footer>
 
@@ -181,7 +187,7 @@ const App = () => {
           href="https://wa.me/258869926990"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Contactar a ACMA por WhatsApp"
+          aria-label={t('Contactar a ACMA por WhatsApp')}
         >
           <WhatsAppOutlined />
         </a>
